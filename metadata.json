@@ -1,0 +1,6 @@
+{
+  "name": "Daily Expense Tracker",
+  "description": "A personal daily expense tracking Progressive Web App with offline support, person tracking, and visual analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

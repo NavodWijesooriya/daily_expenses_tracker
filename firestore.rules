@@ -1,0 +1,117 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['name', 'email']) &&
+        data.keys().hasOnly(['name', 'email', 'createdAt']) &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+        data.email is string && data.email.size() > 0 && data.email.size() <= 150;
+    }
+
+    function isValidExpense(data) {
+      return data.keys().hasAll(['expenseName', 'amount', 'category', 'date']) &&
+        data.keys().hasOnly(['expenseName', 'amount', 'category', 'personName', 'description', 'date', 'createdAt', 'updatedAt']) &&
+        data.expenseName is string && data.expenseName.size() > 0 && data.expenseName.size() <= 150 &&
+        data.amount is number && data.amount > 0 &&
+        data.category is string && data.category.size() > 0 && data.category.size() <= 50 &&
+        data.date is string && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') &&
+        (!('personName' in data) || (data.personName is string && data.personName.size() <= 100)) &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 500));
+    }
+
+    function isValidLoan(data) {
+      return data.keys().hasAll(['personName', 'amount', 'date', 'status']) &&
+        data.keys().hasOnly(['personName', 'amount', 'date', 'description', 'status', 'totalReturned', 'remainingAmount', 'returns', 'createdAt', 'updatedAt']) &&
+        data.personName is string && data.personName.size() > 0 && data.personName.size() <= 100 &&
+        data.amount is number && data.amount > 0 &&
+        data.date is string && data.date.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$') &&
+        data.status in ['pending', 'partially_returned', 'returned'] &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 500)) &&
+        (!('totalReturned' in data) || (data.totalReturned is number && data.totalReturned >= 0)) &&
+        (!('remainingAmount' in data) || (data.remainingAmount is number && data.remainingAmount >= 0)) &&
+        (!('returns' in data) || (data.returns is list && data.returns.size() <= 200));
+    }
+
+    // User Profile Documents
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if false;
+
+      allow create: if isOwner(userId) &&
+        isValidId(userId) &&
+        isValidUser(incoming());
+
+      allow update: if isOwner(userId) &&
+        isValidId(userId) &&
+        isValidUser(incoming()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['name', 'email', 'createdAt']);
+
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      // Subcollection: Expenses
+      match /expenses/{expenseId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(expenseId);
+        allow list: if isOwner(userId) && isValidId(userId);
+
+        allow create: if isOwner(userId) &&
+          isValidId(userId) &&
+          isValidId(expenseId) &&
+          isValidExpense(incoming());
+
+        allow update: if isOwner(userId) &&
+          isValidId(userId) &&
+          isValidId(expenseId) &&
+          isValidExpense(incoming()) &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['expenseName', 'amount', 'category', 'personName', 'description', 'date', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(expenseId);
+      }
+
+      // Subcollection: Loans
+      match /loans/{loanId} {
+        allow get: if isOwner(userId) && isValidId(userId) && isValidId(loanId);
+        allow list: if isOwner(userId) && isValidId(userId);
+
+        allow create: if isOwner(userId) &&
+          isValidId(userId) &&
+          isValidId(loanId) &&
+          isValidLoan(incoming());
+
+        allow update: if isOwner(userId) &&
+          isValidId(userId) &&
+          isValidId(loanId) &&
+          isValidLoan(incoming()) &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['personName', 'amount', 'date', 'description', 'status', 'totalReturned', 'remainingAmount', 'returns', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(loanId);
+      }
+    }
+  }
+}

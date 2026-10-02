@@ -1,0 +1,140 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "User display name",
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address",
+          "maxLength": 150
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account creation timestamp"
+        }
+      },
+      "required": ["name", "email"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Personal expense entry",
+      "type": "object",
+      "properties": {
+        "expenseName": {
+          "type": "string",
+          "description": "Name or title of the expense",
+          "minLength": 1,
+          "maxLength": 150
+        },
+        "amount": {
+          "type": "number",
+          "description": "Amount in Sri Lankan Rupees (LKR)"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category name such as Home Needs, Wife Personal, Other",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "personName": {
+          "type": "string",
+          "description": "Associated person name",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional notes or details",
+          "maxLength": 500
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of transaction in YYYY-MM-DD format",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Server timestamp of record creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Server timestamp of record update"
+        }
+      },
+      "required": ["expenseName", "amount", "category", "date"]
+    },
+    "Loan": {
+      "title": "Loan",
+      "description": "Money lent to a person and tracked for repayment",
+      "type": "object",
+      "properties": {
+        "personName": {
+          "type": "string",
+          "description": "Name of the person borrowing money",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "amount": {
+          "type": "number",
+          "description": "Original loan amount in Sri Lankan Rupees (LKR)"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date loan was given in YYYY-MM-DD format",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional notes or purpose of the loan",
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "partially_returned", "returned"],
+          "description": "Current status of loan repayment"
+        },
+        "totalReturned": {
+          "type": "number",
+          "description": "Cumulative amount returned so far"
+        },
+        "remainingAmount": {
+          "type": "number",
+          "description": "Remaining unpaid balance"
+        },
+        "returns": {
+          "type": "array",
+          "description": "List of return payment entries"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp of record creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of last record update"
+        }
+      },
+      "required": ["personName", "amount", "date", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Collection of user accounts"
+    },
+    "/users/{userId}/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "User subcollection of expense records"
+    },
+    "/users/{userId}/loans/{loanId}": {
+      "schema": "Loan",
+      "description": "User subcollection of money lent and return records"
+    }
+  }
+}
