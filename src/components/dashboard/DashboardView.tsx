@@ -25,6 +25,7 @@ import { formatCurrency, formatDate, getTodayDateString } from '../../utils/form
 interface DashboardViewProps {
   expenses: Expense[];
   loans?: Loan[];
+  userName: string;
   onOpenAddExpense: () => void;
   onEditExpense: (expense: Expense) => void;
   onDeleteExpense: (expense: Expense) => void;
@@ -34,6 +35,7 @@ interface DashboardViewProps {
 export const DashboardView: React.FC<DashboardViewProps> = ({
   expenses,
   loans = [],
+  userName,
   onOpenAddExpense,
   onEditExpense,
   onDeleteExpense,
@@ -150,7 +152,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <Sparkles className="w-3.5 h-3.5 text-[#FF9248]" />
             <span>{currentMonthName}</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">Daily Expense Tracker</h1>
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+            <span className="text-[#FF9248]">{userName}&apos;s</span> Daily Expense Tracker
+          </h1>
           <p className="text-white/90 text-xs sm:text-sm max-w-md">
             Manage your daily transactions, keep track of family expenses, and monitor person loans seamlessly.
           </p>

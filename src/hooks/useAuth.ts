@@ -1,17 +1,21 @@
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { useAuthContext } from '../../context/AuthContext.tsx';
+import { syncUserProfile, useAuthContext } from '../../context/AuthContext.tsx';
 
 export function useAuth() {
-  const { user, loading } = useAuthContext();
+  const { user, loading, displayName, setDisplayName } = useAuthContext();
 
   const signOutUser = async () => {
     await signOut(auth);
   };
 
-  const signInUser = async (email: string, password: string) => {
-    if (!email.trim() || !password) {
-      throw new Error('Please enter both your email address and password.');
+  const signInUser = async (name: string, email: string, password: string) => {
+    if (!name.trim() || !email.trim() || !password) {
+      throw new Error('Please enter your name, email address, and password.');
+    }
+
+    if (name.trim().length > 60) {
+      throw new Error('Your name must be 60 characters or fewer.');
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,12 +27,22 @@ export function useAuth() {
       throw new Error('Password must be at least 6 characters.');
     }
 
-    await signInWithEmailAndPassword(auth, email.trim(), password);
+    const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
+    const normalizedName = name.trim();
+    await updateProfile(credential.user, { displayName: normalizedName });
+    setDisplayName(normalizedName);
+
+    try {
+      await syncUserProfile(credential.user);
+    } catch (error) {
+      console.error('Failed to sync user profile to Firestore:', error);
+    }
   };
 
   return {
     user,
     loading,
+    displayName,
     signOutUser,
     signInUser,
   };

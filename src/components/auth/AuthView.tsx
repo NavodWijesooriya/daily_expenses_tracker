@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wallet, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
+import { Wallet, UserRound, Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
 interface AuthViewProps {
@@ -7,6 +7,7 @@ interface AuthViewProps {
 }
 
 export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +22,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
     setSubmitting(true);
 
     try {
-      await signInUser(email, password);
+      await signInUser(name, email, password);
       onSuccess();
     } catch (err: unknown) {
       console.error('Sign in error:', err);
@@ -55,7 +56,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
               Sign In
             </h1>
             <p className="text-xs sm:text-sm text-[#B3B3B3] mt-1">
-              Enter your email and password to access your daily expenses
+              Enter your name, email, and password to access your daily expenses
             </p>
           </div>
         </div>
@@ -68,8 +69,31 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
           </div>
         )}
 
-        {/* Email and Password Only Form */}
+        {/* Sign-in form */}
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name input */}
+          <div className="space-y-1.5">
+            <label htmlFor="name" className="block text-xs font-bold text-white">
+              Your Name
+            </label>
+            <div className="relative">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A] pointer-events-none">
+                <UserRound className="w-4 h-4" />
+              </div>
+              <input
+                id="name"
+                type="text"
+                autoComplete="name"
+                required
+                maxLength={60}
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-[#1F1F1F] border border-[#333333] rounded-2xl text-xs sm:text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-transparent transition-all"
+              />
+            </div>
+          </div>
+
           {/* Email input */}
           <div className="space-y-1.5">
             <label

@@ -38,7 +38,7 @@ import { DeleteExpenseDialog } from './components/expenses/DeleteExpenseDialog';
 import { Loader2 } from 'lucide-react';
 
 export default function App() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, displayName, loading: authLoading } = useAuth();
   // Initialize theme
   useTheme();
 
@@ -294,6 +294,7 @@ export default function App() {
       <DashboardView
         expenses={visibleExpenses}
         loans={visibleLoans}
+        userName={displayName || user.email?.split('@')[0] || 'User'}
         onOpenAddExpense={() => setIsAddModalOpen(true)}
         onEditExpense={(exp) => setEditingExpense(exp)}
         onDeleteExpense={(exp) => setDeletingExpense(exp)}
