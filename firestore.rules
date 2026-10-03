@@ -61,56 +61,56 @@ service cloud.firestore {
 
     // User Profile Documents
     match /users/{userId} {
-      allow get: if isOwner(userId) && isValidId(userId);
+      allow get: if isOwner(userId);
       allow list: if false;
 
       allow create: if isOwner(userId) &&
-        isValidId(userId) &&
         isValidUser(incoming());
 
       allow update: if isOwner(userId) &&
-        isValidId(userId) &&
         isValidUser(incoming()) &&
         incoming().diff(existing()).affectedKeys().hasOnly(['name', 'email', 'createdAt']);
 
-      allow delete: if isOwner(userId) && isValidId(userId);
+      allow delete: if isOwner(userId);
+
+      // Generic private records: users/{userId}/data/{documentId}
+      match /data/{documentId} {
+        allow get, list: if isOwner(userId);
+        allow create, update, delete: if isOwner(userId);
+      }
 
       // Subcollection: Expenses
       match /expenses/{expenseId} {
-        allow get: if isOwner(userId) && isValidId(userId) && isValidId(expenseId);
-        allow list: if isOwner(userId) && isValidId(userId);
+        allow get: if isOwner(userId) && isValidId(expenseId);
+        allow list: if isOwner(userId);
 
         allow create: if isOwner(userId) &&
-          isValidId(userId) &&
           isValidId(expenseId) &&
           isValidExpense(incoming());
 
         allow update: if isOwner(userId) &&
-          isValidId(userId) &&
           isValidId(expenseId) &&
           isValidExpense(incoming()) &&
           incoming().diff(existing()).affectedKeys().hasOnly(['expenseName', 'amount', 'category', 'personName', 'description', 'date', 'updatedAt']);
 
-        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(expenseId);
+        allow delete: if isOwner(userId) && isValidId(expenseId);
       }
 
       // Subcollection: Loans
       match /loans/{loanId} {
-        allow get: if isOwner(userId) && isValidId(userId) && isValidId(loanId);
-        allow list: if isOwner(userId) && isValidId(userId);
+        allow get: if isOwner(userId) && isValidId(loanId);
+        allow list: if isOwner(userId);
 
         allow create: if isOwner(userId) &&
-          isValidId(userId) &&
           isValidId(loanId) &&
           isValidLoan(incoming());
 
         allow update: if isOwner(userId) &&
-          isValidId(userId) &&
           isValidId(loanId) &&
           isValidLoan(incoming()) &&
           incoming().diff(existing()).affectedKeys().hasOnly(['personName', 'amount', 'date', 'description', 'status', 'totalReturned', 'remainingAmount', 'returns', 'updatedAt']);
 
-        allow delete: if isOwner(userId) && isValidId(userId) && isValidId(loanId);
+        allow delete: if isOwner(userId) && isValidId(loanId);
       }
     }
   }

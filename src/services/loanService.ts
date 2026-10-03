@@ -1,166 +1,79 @@
 import {
   collection,
-  doc,
-  setDoc,
-  updateDoc,
   deleteDoc,
+  doc,
   onSnapshot,
-  query,
   orderBy,
-  Unsubscribe,
+  query,
+  runTransaction,
+  setDoc,
+  type Unsubscribe,
 } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { auth, db } from '../lib/firebase';
 import { Loan, LoanReturnRecord } from '../types/loan';
 
-const STORAGE_PREFIX = 'daily_expenses_loans_data_';
-
-function getLocalStorageKey(userId: string): string {
-  return `${STORAGE_PREFIX}${userId || 'local'}`;
+function requireUserId(): string {
+  const userId = auth.currentUser?.uid;
+  if (!userId) {
+    throw new Error('You must be signed in to access your loans.');
+  }
+  return userId;
 }
 
-function getStoredLoans(userId: string): Loan[] {
-  try {
-    const raw = localStorage.getItem(getLocalStorageKey(userId));
-    if (!raw) {
-      return [];
-    }
-    const parsed: Loan[] = JSON.parse(raw);
-    const cleaned = parsed.filter(
-      (item) =>
-        item &&
-        item.id &&
-        !item.id.startsWith('loan_init_') &&
-        !item.id.startsWith('mock_') &&
-        !item.id.startsWith('dummy_') &&
-        !item.id.startsWith('sample_')
-    );
-    if (cleaned.length !== parsed.length) {
-      localStorage.setItem(getLocalStorageKey(userId), JSON.stringify(cleaned));
-    }
-    return cleaned;
-  } catch {
-    return [];
-  }
-}
-
-function saveStoredLoans(userId: string, loans: Loan[]): void {
-  try {
-    localStorage.setItem(getLocalStorageKey(userId), JSON.stringify(loans));
-  } catch (err) {
-    console.warn('Could not persist loans locally:', err);
-  }
+function loanDocument(userId: string, loanId: string) {
+  return doc(db, 'users', userId, 'loans', loanId);
 }
 
 export function subscribeToLoans(
-  userId: string,
   onData: (loans: Loan[]) => void,
   onError?: (err: unknown) => void
 ): Unsubscribe {
-  const path = `users/${userId}/loans`;
-  let localCache = getStoredLoans(userId);
-  onData(localCache);
+  const userId = requireUserId();
+  const loansQuery = query(collection(db, 'users', userId, 'loans'), orderBy('date', 'desc'));
 
-  try {
-    const loansRef = collection(db, 'users', userId, 'loans');
-    const q = query(loansRef, orderBy('date', 'desc'));
-
-    return onSnapshot(
-      q,
-      (snapshot) => {
-        const firestoreLoans: Loan[] = [];
-        snapshot.forEach((docSnap) => {
-          const d = docSnap.data();
-          firestoreLoans.push({
-            id: docSnap.id,
-            personName: d.personName || '',
-            amount: Number(d.amount) || 0,
-            date: d.date || '',
-            description: d.description || undefined,
-            status: d.status || 'pending',
-            totalReturned: Number(d.totalReturned) || 0,
-            remainingAmount: Number(d.remainingAmount) !== undefined ? Number(d.remainingAmount) : (Number(d.amount) - (Number(d.totalReturned) || 0)),
-            returns: Array.isArray(d.returns) ? d.returns : [],
-            createdAt: d.createdAt,
-            updatedAt: d.updatedAt,
-            syncStatus: snapshot.metadata.hasPendingWrites ? 'pending' : 'synced',
-          });
-        });
-
-        saveStoredLoans(userId, firestoreLoans);
-        onData(firestoreLoans);
-      },
-      (error) => {
-        console.warn('Firestore loan sync fallback to local cache:', error);
-        localCache = getStoredLoans(userId);
-        onData(localCache);
-        if (onError) onError(error);
-      }
-    );
-  } catch (err) {
-    console.warn('Could not initialize firestore subscription, using local cache:', err);
-    localCache = getStoredLoans(userId);
-    onData(localCache);
-    return () => {};
-  }
+  return onSnapshot(
+    loansQuery,
+    (snapshot) => {
+      onData(
+        snapshot.docs.map((loanDoc) => ({
+          ...loanDoc.data(),
+          id: loanDoc.id,
+          syncStatus: snapshot.metadata.hasPendingWrites ? 'pending' : 'synced',
+        })) as Loan[]
+      );
+    },
+    (error) => onError?.(error)
+  );
 }
 
-export async function addLoan(
-  userId: string,
-  data: {
-    personName: string;
-    amount: number;
-    date: string;
-    description?: string;
-  }
-): Promise<string> {
-  const newId = 'loan_' + Date.now() + '_' + Math.random().toString(36).substring(2, 7);
-  const path = `users/${userId}/loans/${newId}`;
+export async function addLoan(data: {
+  personName: string;
+  amount: number;
+  date: string;
+  description?: string;
+}): Promise<string> {
+  const userId = requireUserId();
+  const loanRef = doc(collection(db, 'users', userId, 'loans'));
+  const amount = Math.round(Number(data.amount) * 100) / 100;
   const now = new Date().toISOString();
-
-  const payload: Loan = {
-    id: newId,
+  const loanData = {
     personName: data.personName.trim().slice(0, 100),
-    amount: Math.round(Number(data.amount) * 100) / 100,
+    amount,
     date: data.date,
-    description: data.description ? data.description.trim().slice(0, 500) : undefined,
-    status: 'pending',
+    status: 'pending' as const,
     totalReturned: 0,
-    remainingAmount: Math.round(Number(data.amount) * 100) / 100,
-    returns: [],
+    remainingAmount: amount,
+    returns: [] as LoanReturnRecord[],
     createdAt: now,
     updatedAt: now,
-    syncStatus: 'synced',
+    ...(data.description ? { description: data.description.trim().slice(0, 500) } : {}),
   };
 
-  // Local storage update
-  const current = getStoredLoans(userId);
-  const updated = [payload, ...current];
-  saveStoredLoans(userId, updated);
-
-  try {
-    const docRef = doc(db, 'users', userId, 'loans', newId);
-    const firestoreData: Record<string, unknown> = {
-      personName: payload.personName,
-      amount: payload.amount,
-      date: payload.date,
-      status: payload.status,
-      totalReturned: payload.totalReturned,
-      remainingAmount: payload.remainingAmount,
-      returns: payload.returns,
-      createdAt: payload.createdAt,
-      updatedAt: payload.updatedAt,
-    };
-    if (payload.description) firestoreData.description = payload.description;
-    await setDoc(docRef, firestoreData);
-  } catch (error) {
-    console.warn('Firestore addLoan error, preserved in local storage:', error);
-  }
-
-  return newId;
+  await setDoc(loanRef, loanData);
+  return loanRef.id;
 }
 
 export async function recordLoanReturn(
-  userId: string,
   loanId: string,
   returnData: {
     amount: number;
@@ -168,59 +81,41 @@ export async function recordLoanReturn(
     note?: string;
   }
 ): Promise<void> {
-  const current = getStoredLoans(userId);
-  const loanIndex = current.findIndex((l) => l.id === loanId);
-  if (loanIndex === -1) throw new Error('Loan not found');
-
-  const loan = current[loanIndex];
+  const userId = requireUserId();
+  const loanRef = loanDocument(userId, loanId);
   const returnAmount = Math.round(Number(returnData.amount) * 100) / 100;
   if (returnAmount <= 0) throw new Error('Returned amount must be greater than zero');
 
-  const newTotalReturned = Math.round((loan.totalReturned + returnAmount) * 100) / 100;
-  const newRemainingAmount = Math.max(0, Math.round((loan.amount - newTotalReturned) * 100) / 100);
+  await runTransaction(db, async (transaction) => {
+    const loanSnapshot = await transaction.get(loanRef);
+    if (!loanSnapshot.exists()) throw new Error('Loan not found');
 
-  const newStatus: Loan['status'] = newRemainingAmount <= 0 ? 'returned' : 'partially_returned';
+    const loan = loanSnapshot.data() as Omit<Loan, 'id' | 'syncStatus'>;
+    const returns = loan.returns || [];
+    if (returns.length >= 200) throw new Error('This loan has reached the maximum number of return records.');
 
-  const newReturnRecord: LoanReturnRecord = {
-    id: 'ret_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-    amount: returnAmount,
-    date: returnData.date,
-    note: returnData.note ? returnData.note.trim().slice(0, 300) : undefined,
-    createdAt: new Date().toISOString(),
-  };
+    const totalReturned = Math.round((loan.totalReturned + returnAmount) * 100) / 100;
+    const remainingAmount = Math.max(0, Math.round((loan.amount - totalReturned) * 100) / 100);
+    const status: Loan['status'] = remainingAmount <= 0 ? 'returned' : 'partially_returned';
+    const returnRecord: LoanReturnRecord = {
+      id: `ret_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      amount: returnAmount,
+      date: returnData.date,
+      ...(returnData.note ? { note: returnData.note.trim().slice(0, 300) } : {}),
+      createdAt: new Date().toISOString(),
+    };
 
-  const updatedReturns = [...(loan.returns || []), newReturnRecord];
-  const now = new Date().toISOString();
-
-  const updatedLoan: Loan = {
-    ...loan,
-    totalReturned: newTotalReturned,
-    remainingAmount: newRemainingAmount,
-    status: newStatus,
-    returns: updatedReturns,
-    updatedAt: now,
-  };
-
-  current[loanIndex] = updatedLoan;
-  saveStoredLoans(userId, current);
-
-  try {
-    const path = `users/${userId}/loans/${loanId}`;
-    const docRef = doc(db, 'users', userId, 'loans', loanId);
-    await updateDoc(docRef, {
-      totalReturned: newTotalReturned,
-      remainingAmount: newRemainingAmount,
-      status: newStatus,
-      returns: updatedReturns,
-      updatedAt: now,
+    transaction.update(loanRef, {
+      totalReturned,
+      remainingAmount,
+      status,
+      returns: [...returns, returnRecord],
+      updatedAt: new Date().toISOString(),
     });
-  } catch (error) {
-    console.warn('Firestore recordLoanReturn error, preserved locally:', error);
-  }
+  });
 }
 
 export async function updateLoan(
-  userId: string,
   loanId: string,
   updates: {
     personName?: string;
@@ -229,109 +124,76 @@ export async function updateLoan(
     description?: string;
   }
 ): Promise<void> {
-  const current = getStoredLoans(userId);
-  const loanIndex = current.findIndex((l) => l.id === loanId);
-  if (loanIndex === -1) throw new Error('Loan not found');
+  const userId = requireUserId();
+  const loanRef = loanDocument(userId, loanId);
 
-  const loan = current[loanIndex];
-  const newAmount = updates.amount !== undefined ? Math.round(Number(updates.amount) * 100) / 100 : loan.amount;
-  const newRemainingAmount = Math.max(0, Math.round((newAmount - loan.totalReturned) * 100) / 100);
-  const newStatus: Loan['status'] =
-    loan.totalReturned === 0
-      ? 'pending'
-      : newRemainingAmount <= 0
-      ? 'returned'
-      : 'partially_returned';
+  await runTransaction(db, async (transaction) => {
+    const loanSnapshot = await transaction.get(loanRef);
+    if (!loanSnapshot.exists()) throw new Error('Loan not found');
 
-  const now = new Date().toISOString();
-  const updatedLoan: Loan = {
-    ...loan,
-    personName: updates.personName ? updates.personName.trim().slice(0, 100) : loan.personName,
-    amount: newAmount,
-    date: updates.date || loan.date,
-    description: updates.description !== undefined ? (updates.description ? updates.description.trim().slice(0, 500) : undefined) : loan.description,
-    remainingAmount: newRemainingAmount,
-    status: newStatus,
-    updatedAt: now,
-  };
-
-  current[loanIndex] = updatedLoan;
-  saveStoredLoans(userId, current);
-
-  try {
-    const docRef = doc(db, 'users', userId, 'loans', loanId);
-    const firestoreUpdates: Record<string, unknown> = {
-      personName: updatedLoan.personName,
-      amount: updatedLoan.amount,
-      date: updatedLoan.date,
-      remainingAmount: updatedLoan.remainingAmount,
-      status: updatedLoan.status,
-      updatedAt: now,
+    const loan = loanSnapshot.data() as Omit<Loan, 'id' | 'syncStatus'>;
+    const amount = updates.amount !== undefined
+      ? Math.round(Number(updates.amount) * 100) / 100
+      : loan.amount;
+    const remainingAmount = Math.max(0, Math.round((amount - loan.totalReturned) * 100) / 100);
+    const status: Loan['status'] =
+      loan.totalReturned === 0
+        ? 'pending'
+        : remainingAmount <= 0
+          ? 'returned'
+          : 'partially_returned';
+    const firestoreUpdates: Record<string, string | number> = {
+      amount,
+      remainingAmount,
+      status,
+      updatedAt: new Date().toISOString(),
     };
-    if (updatedLoan.description !== undefined) {
-      firestoreUpdates.description = updatedLoan.description || '';
+
+    if (updates.personName !== undefined) {
+      firestoreUpdates.personName = updates.personName.trim().slice(0, 100);
     }
-    await updateDoc(docRef, firestoreUpdates);
-  } catch (error) {
-    console.warn('Firestore updateLoan error, saved locally:', error);
-  }
+    if (updates.date !== undefined) firestoreUpdates.date = updates.date;
+    if (updates.description !== undefined) {
+      firestoreUpdates.description = updates.description.trim().slice(0, 500);
+    }
+
+    transaction.update(loanRef, firestoreUpdates);
+  });
 }
 
-export async function deleteLoan(userId: string, loanId: string): Promise<void> {
-  const current = getStoredLoans(userId);
-  const updated = current.filter((l) => l.id !== loanId);
-  saveStoredLoans(userId, updated);
-
-  try {
-    const docRef = doc(db, 'users', userId, 'loans', loanId);
-    await deleteDoc(docRef);
-  } catch (error) {
-    console.warn('Firestore deleteLoan error:', error);
-  }
+export async function deleteLoan(loanId: string): Promise<void> {
+  const userId = requireUserId();
+  await deleteDoc(loanDocument(userId, loanId));
 }
 
-export async function deleteLoanReturn(userId: string, loanId: string, returnId: string): Promise<void> {
-  const current = getStoredLoans(userId);
-  const loanIndex = current.findIndex((l) => l.id === loanId);
-  if (loanIndex === -1) return;
+export async function deleteLoanReturn(loanId: string, returnId: string): Promise<void> {
+  const userId = requireUserId();
+  const loanRef = loanDocument(userId, loanId);
 
-  const loan = current[loanIndex];
-  const returnToRemove = loan.returns.find((r) => r.id === returnId);
-  if (!returnToRemove) return;
+  await runTransaction(db, async (transaction) => {
+    const loanSnapshot = await transaction.get(loanRef);
+    if (!loanSnapshot.exists()) throw new Error('Loan not found');
 
-  const updatedReturns = loan.returns.filter((r) => r.id !== returnId);
-  const newTotalReturned = Math.max(0, Math.round((loan.totalReturned - returnToRemove.amount) * 100) / 100);
-  const newRemainingAmount = Math.max(0, Math.round((loan.amount - newTotalReturned) * 100) / 100);
-  const newStatus: Loan['status'] =
-    newTotalReturned === 0
-      ? 'pending'
-      : newRemainingAmount <= 0
-      ? 'returned'
-      : 'partially_returned';
+    const loan = loanSnapshot.data() as Omit<Loan, 'id' | 'syncStatus'>;
+    const returnRecord = (loan.returns || []).find((item) => item.id === returnId);
+    if (!returnRecord) throw new Error('Loan return not found');
 
-  const now = new Date().toISOString();
-  const updatedLoan: Loan = {
-    ...loan,
-    totalReturned: newTotalReturned,
-    remainingAmount: newRemainingAmount,
-    status: newStatus,
-    returns: updatedReturns,
-    updatedAt: now,
-  };
+    const returns = (loan.returns || []).filter((item) => item.id !== returnId);
+    const totalReturned = Math.max(0, Math.round((loan.totalReturned - returnRecord.amount) * 100) / 100);
+    const remainingAmount = Math.max(0, Math.round((loan.amount - totalReturned) * 100) / 100);
+    const status: Loan['status'] =
+      totalReturned === 0
+        ? 'pending'
+        : remainingAmount <= 0
+          ? 'returned'
+          : 'partially_returned';
 
-  current[loanIndex] = updatedLoan;
-  saveStoredLoans(userId, current);
-
-  try {
-    const docRef = doc(db, 'users', userId, 'loans', loanId);
-    await updateDoc(docRef, {
-      totalReturned: newTotalReturned,
-      remainingAmount: newRemainingAmount,
-      status: newStatus,
-      returns: updatedReturns,
-      updatedAt: now,
+    transaction.update(loanRef, {
+      totalReturned,
+      remainingAmount,
+      status,
+      returns,
+      updatedAt: new Date().toISOString(),
     });
-  } catch (error) {
-    console.warn('Firestore deleteLoanReturn error:', error);
-  }
+  });
 }

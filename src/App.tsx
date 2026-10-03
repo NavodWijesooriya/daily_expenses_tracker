@@ -69,28 +69,35 @@ export default function App() {
 
   // Expenses State & subscription
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [expensesUserId, setExpensesUserId] = useState<string | null>(null);
   const [loadingExpenses, setLoadingExpenses] = useState(true);
   const [expensesError, setExpensesError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
       setExpenses([]);
+      setExpensesUserId(null);
+      setLoans([]);
       setLoadingExpenses(false);
+      setExpensesError(null);
       return;
     }
 
+    setExpenses([]);
     setLoadingExpenses(true);
     setExpensesError(null);
 
     const unsubscribe = subscribeToExpenses(
-      user.uid,
       (data) => {
         setExpenses(data);
+        setExpensesUserId(user.uid);
         setLoadingExpenses(false);
       },
       (err) => {
         console.error('Subscription error', err);
-        setExpensesError('Unable to sync with Firestore. Using offline local cache.');
+        setExpenses([]);
+        setExpensesUserId(user.uid);
+        setExpensesError('Unable to load your expenses from Firestore. Please try again later.');
         setLoadingExpenses(false);
       }
     );
@@ -100,19 +107,35 @@ export default function App() {
 
   // Loans State & subscription
   const [loans, setLoans] = useState<Loan[]>([]);
+  const [loansUserId, setLoansUserId] = useState<string | null>(null);
+  const [loansError, setLoansError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
       setLoans([]);
+      setLoansUserId(null);
+      setLoansError(null);
       return;
     }
+    setLoans([]);
+    setLoansError(null);
     const unsubscribe = subscribeToLoans(
-      user.uid,
-      (data) => setLoans(data),
-      (err) => console.warn('Loans sync error:', err)
+      (data) => {
+        setLoans(data);
+        setLoansUserId(user.uid);
+      },
+      (err) => {
+        console.error('Loans sync error:', err);
+        setLoans([]);
+        setLoansUserId(user.uid);
+        setLoansError('Unable to load your loans from Firestore. Please try again later.');
+      }
     );
     return () => unsubscribe();
   }, [user]);
+
+  const visibleExpenses = expensesUserId === user?.uid ? expenses : [];
+  const visibleLoans = loansUserId === user?.uid ? loans : [];
 
   // Loan handlers
   const handleAddLoan = async (data: {
@@ -122,7 +145,7 @@ export default function App() {
     description?: string;
   }) => {
     if (!user) throw new Error('You must be signed in.');
-    return await addLoan(user.uid, data);
+    return await addLoan(data);
   };
 
   const handleRecordLoanReturn = async (
@@ -134,17 +157,17 @@ export default function App() {
     }
   ) => {
     if (!user) throw new Error('You must be signed in.');
-    await recordLoanReturn(user.uid, loanId, data);
+    await recordLoanReturn(loanId, data);
   };
 
   const handleDeleteLoan = async (loanId: string) => {
     if (!user) throw new Error('You must be signed in.');
-    await deleteLoan(user.uid, loanId);
+    await deleteLoan(loanId);
   };
 
   const handleDeleteLoanReturn = async (loanId: string, returnId: string) => {
     if (!user) throw new Error('You must be signed in.');
-    await deleteLoanReturn(user.uid, loanId, returnId);
+    await deleteLoanReturn(loanId, returnId);
   };
 
   // Modal states
@@ -155,11 +178,11 @@ export default function App() {
   // Distinct categories available in user's data
   const existingCategories = useMemo(() => {
     const set = new Set<string>(['Home Needs', 'Wife', 'Personal', 'Other']);
-    expenses.forEach((e) => {
+    visibleExpenses.forEach((e) => {
       if (e.category) set.add(e.category);
     });
     return Array.from(set);
-  }, [expenses]);
+  }, [visibleExpenses]);
 
   // Handlers for adding, editing, deleting
   const handleAddExpense = async (data: {
@@ -171,23 +194,23 @@ export default function App() {
     date: string;
   }) => {
     if (!user) throw new Error('You must be signed in.');
-    await addExpense(user.uid, data);
+    await addExpense(data);
   };
 
   const handleUpdateExpense = async (expenseId: string, updates: Partial<Expense>) => {
     if (!user) throw new Error('You must be signed in.');
-    await updateExpense(user.uid, expenseId, updates);
+    await updateExpense(expenseId, updates);
   };
 
   const handleDeleteExpense = async (expenseId: string) => {
     if (!user) throw new Error('You must be signed in.');
-    await deleteExpense(user.uid, expenseId);
+    await deleteExpense(expenseId);
   };
 
   // Determine if there are pending offline writes
   const hasPendingWrites = useMemo(() => {
-    return expenses.some((e) => e.syncStatus === 'pending');
-  }, [expenses]);
+    return visibleExpenses.some((e) => e.syncStatus === 'pending');
+  }, [visibleExpenses]);
 
   // Authentication Loading State
   if (authLoading) {
@@ -213,14 +236,14 @@ export default function App() {
 
   // Active view resolver
   const renderCurrentView = () => {
-    if (loadingExpenses && expenses.length === 0) {
+    if ((loadingExpenses || expensesUserId !== user.uid) && visibleExpenses.length === 0) {
       return (
         <div className="py-24 flex flex-col items-center justify-center text-center">
           <Loader2 className="w-8 h-8 text-[#FF9248] animate-spin mb-3" />
           <p className="text-sm font-semibold text-[#B3B3B3]">
             Loading your expense records...
           </p>
-          <span className="text-xs text-[#8A8A8A] mt-0.5">Ready for custom Firestore functions</span>
+          <span className="text-xs text-[#8A8A8A] mt-0.5">Syncing securely with Firestore</span>
         </div>
       );
     }
@@ -228,7 +251,7 @@ export default function App() {
     if (currentPath === '/dashboard/expenses') {
       return (
         <ExpensesListView
-          expenses={expenses}
+          expenses={visibleExpenses}
           onOpenAddExpense={() => setIsAddModalOpen(true)}
           onEditExpense={(exp) => setEditingExpense(exp)}
           onDeleteExpense={(exp) => setDeletingExpense(exp)}
@@ -239,7 +262,7 @@ export default function App() {
     if (currentPath === '/dashboard/loans') {
       return (
         <LoansView
-          loans={loans}
+          loans={visibleLoans}
           onAddLoan={handleAddLoan}
           onRecordReturn={handleRecordLoanReturn}
           onDeleteLoan={handleDeleteLoan}
@@ -249,13 +272,13 @@ export default function App() {
     }
 
     if (currentPath === '/dashboard/monthly-summary') {
-      return <MonthlySummaryView expenses={expenses} />;
+      return <MonthlySummaryView expenses={visibleExpenses} />;
     }
 
     if (currentPath === '/dashboard/people') {
       return (
         <PeopleView
-          expenses={expenses}
+          expenses={visibleExpenses}
           onOpenAddExpense={() => setIsAddModalOpen(true)}
           onEditExpense={(exp) => setEditingExpense(exp)}
         />
@@ -269,8 +292,8 @@ export default function App() {
     // Default: Dashboard
     return (
       <DashboardView
-        expenses={expenses}
-        loans={loans}
+        expenses={visibleExpenses}
+        loans={visibleLoans}
         onOpenAddExpense={() => setIsAddModalOpen(true)}
         onEditExpense={(exp) => setEditingExpense(exp)}
         onDeleteExpense={(exp) => setDeletingExpense(exp)}
@@ -305,6 +328,12 @@ export default function App() {
             >
               Dismiss
             </button>
+          </div>
+        )}
+
+        {loansError && (
+          <div className="mb-6 p-4 rounded-2xl bg-[#242424] border border-[#493426] text-[#FF9248] text-xs">
+            {loansError}
           </div>
         )}
 
