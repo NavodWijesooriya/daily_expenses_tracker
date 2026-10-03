@@ -73,18 +73,18 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-lg rounded-3xl border border-[#E5E5E5] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+      <div className="bg-[#1F1F1F] w-full max-w-lg rounded-3xl border border-[#333333] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-[#E5E5E5]">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#333333]">
           <div>
-            <h2 className="text-lg font-black text-[#1F1F1F]">Lend Money / Add Loan</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h2 className="text-lg font-black text-white">Lend Money / Add Loan</h2>
+            <p className="text-xs text-[#B3B3B3] mt-0.5">
               Record money given to a friend with pending return status
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-[#1F1F1F] rounded-xl hover:bg-[#F5F5F5] transition cursor-pointer"
+            className="p-2 text-[#8A8A8A] hover:text-white rounded-xl hover:bg-[#242424] transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -93,16 +93,16 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
-            <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-2xl bg-[#2A171A] border border-[#54252D] text-rose-300 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Status Indicator */}
-          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#FFF3EA] border border-[#FFE3D0]">
-            <span className="text-xs font-semibold text-[#1F1F1F]">Initial Status:</span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF9248] text-white shadow-xs">
+          <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#2D211A] border border-[#493426]">
+            <span className="text-xs font-semibold text-white">Initial Status:</span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF9248] text-[#0F0F0F] shadow-xs">
               <Clock className="w-3.5 h-3.5" />
               Pending
             </span>
@@ -110,11 +110,11 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
 
           {/* Person's Name */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1F1F1F]">
+            <label className="block text-xs font-bold text-white">
               Person's Name <span className="text-[#FF9248]">*</span>
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A] pointer-events-none">
                 <User className="w-4 h-4" />
               </div>
               <input
@@ -123,20 +123,20 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
                 placeholder="e.g. Kasun"
                 value={personName}
                 onChange={(e) => setPersonName(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#E5E5E5] rounded-xl text-xs sm:text-sm text-[#1F1F1F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-xl text-xs sm:text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
               />
             </div>
 
             {/* Quick Contact Chips */}
             {existingPersons.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-1">
-                <span className="text-[10px] text-slate-400 self-center mr-1">Frequent:</span>
+                <span className="text-[10px] text-[#8A8A8A] self-center mr-1">Frequent:</span>
                 {existingPersons.slice(0, 5).map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => setPersonName(p)}
-                    className="text-[11px] font-medium px-2 py-0.5 rounded-lg bg-[#F5F5F5] text-slate-700 hover:bg-[#FFF3EA] hover:text-[#FF9248] transition cursor-pointer"
+                    className="text-[11px] font-medium px-2 py-0.5 rounded-lg bg-[#242424] text-[#B3B3B3] hover:bg-[#2D211A] hover:text-[#FF9248] transition cursor-pointer"
                   >
                     {p}
                   </button>
@@ -147,7 +147,7 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
 
           {/* Amount */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1F1F1F]">
+            <label className="block text-xs font-bold text-white">
               Amount (Rs.) <span className="text-[#FF9248]">*</span>
             </label>
             <div className="relative">
@@ -162,18 +162,18 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
                 placeholder="5000"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-full pl-11 pr-4 py-2.5 bg-white border border-[#E5E5E5] rounded-xl text-xs sm:text-sm text-[#1F1F1F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248] font-bold"
+                className="w-full pl-11 pr-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-xl text-xs sm:text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248] font-bold"
               />
             </div>
           </div>
 
           {/* Date */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1F1F1F]">
+            <label className="block text-xs font-bold text-white">
               Date Given <span className="text-[#FF9248]">*</span>
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A] pointer-events-none">
                 <Calendar className="w-4 h-4" />
               </div>
               <input
@@ -181,18 +181,18 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#E5E5E5] rounded-xl text-xs sm:text-sm text-[#1F1F1F] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
+                className="w-full pl-10 pr-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-xl text-xs sm:text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
               />
             </div>
           </div>
 
           {/* Description / Note */}
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-[#1F1F1F]">
-              Description / Note <span className="text-slate-400 font-normal">(Optional)</span>
+            <label className="block text-xs font-bold text-white">
+              Description / Note <span className="text-[#8A8A8A] font-normal">(Optional)</span>
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-3 text-slate-400 pointer-events-none">
+              <div className="absolute left-3.5 top-3 text-[#8A8A8A] pointer-events-none">
                 <FileText className="w-4 h-4" />
               </div>
               <textarea
@@ -200,24 +200,24 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
                 placeholder="e.g. Travel money, to be returned next Friday"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-white border border-[#E5E5E5] rounded-xl text-xs sm:text-sm text-[#1F1F1F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248] resize-none"
+                className="w-full pl-10 pr-4 py-2 bg-[#1F1F1F] border border-[#333333] rounded-xl text-xs sm:text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248] resize-none"
               />
             </div>
           </div>
 
           {/* Actions */}
-          <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#E5E5E5]">
+          <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#333333]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-[#E5E5E5] text-xs font-bold text-slate-600 hover:bg-[#F5F5F5] transition cursor-pointer"
+              className="px-4 py-2.5 rounded-xl border border-[#333333] text-xs font-bold text-[#B3B3B3] hover:bg-[#242424] transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2.5 rounded-xl bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-xs font-bold text-white shadow-md shadow-[#FF9248]/25 transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-xs font-bold text-[#0F0F0F] shadow-md shadow-[#FF9248]/25 transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
               {submitting ? 'Recording...' : 'Record Loan'}
             </button>

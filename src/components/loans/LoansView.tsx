@@ -181,10 +181,10 @@ export const LoansView: React.FC<LoansViewProps> = ({
               <HandCoins className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-[#1F1F1F] tracking-tight">
+              <h1 className="text-2xl font-black text-white tracking-tight">
                 Loans & Money Returns
               </h1>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#B3B3B3]">
                 Track money lent to friends and record full or partial repayments
               </p>
             </div>
@@ -193,7 +193,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-white text-xs font-bold rounded-2xl shadow-lg shadow-[#FF9248]/25 transition cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-[#0F0F0F] text-xs font-bold rounded-2xl shadow-lg shadow-[#FF9248]/25 transition cursor-pointer"
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
           <span>Lend Money / Add Loan</span>
@@ -208,14 +208,14 @@ export const LoansView: React.FC<LoansViewProps> = ({
       />
 
       {/* View Mode Tabs (All Loans vs By Person) */}
-      <div className="flex items-center justify-between gap-4 border-b border-[#E5E5E5] pb-2">
+      <div className="flex items-center justify-between gap-4 border-b border-[#333333] pb-2">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewTab('loans')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
               viewTab === 'loans'
-                ? 'bg-[#FF9248] text-white shadow-xs'
-                : 'text-slate-600 hover:bg-[#FFF9F5]'
+                ? 'bg-[#FF9248] text-[#0F0F0F] shadow-xs'
+                : 'text-[#B3B3B3] hover:bg-[#242424]'
             }`}
           >
             All Loans ({loans.length})
@@ -224,8 +224,8 @@ export const LoansView: React.FC<LoansViewProps> = ({
             onClick={() => setViewTab('people')}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
               viewTab === 'people'
-                ? 'bg-[#FF9248] text-white shadow-xs'
-                : 'text-slate-600 hover:bg-[#FFF9F5]'
+                ? 'bg-[#FF9248] text-[#0F0F0F] shadow-xs'
+                : 'text-[#B3B3B3] hover:bg-[#242424]'
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -235,11 +235,11 @@ export const LoansView: React.FC<LoansViewProps> = ({
 
         {viewTab === 'loans' && (
           <div className="hidden sm:flex items-center gap-2">
-            <span className="text-xs text-slate-400 font-semibold">Sort:</span>
+            <span className="text-xs text-[#8A8A8A] font-semibold">Sort:</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-white border border-[#E5E5E5] text-[#1F1F1F] focus:outline-none focus:ring-1 focus:ring-[#FF9248]"
+              className="text-xs font-semibold px-2.5 py-1.5 rounded-xl bg-[#1F1F1F] border border-[#333333] text-white focus:outline-none focus:ring-1 focus:ring-[#FF9248]"
             >
               <option value="date_desc">Newest First</option>
               <option value="date_asc">Oldest First</option>
@@ -254,13 +254,13 @@ export const LoansView: React.FC<LoansViewProps> = ({
       <div className="flex flex-col sm:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A]" />
           <input
             type="text"
             placeholder={viewTab === 'loans' ? 'Search by person name or note...' : 'Search contacts...'}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#E5E5E5] rounded-2xl text-xs text-[#1F1F1F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9248] shadow-xs"
+            className="w-full pl-10 pr-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-2xl text-xs text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] shadow-xs"
           />
         </div>
 
@@ -278,8 +278,8 @@ export const LoansView: React.FC<LoansViewProps> = ({
                 onClick={() => setStatusFilter(f.id)}
                 className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
                   statusFilter === f.id
-                    ? 'bg-[#FF9248] text-white shadow-xs'
-                    : 'bg-white text-slate-600 border border-[#E5E5E5] hover:bg-[#FFF9F5]'
+                    ? 'bg-[#FF9248] text-[#0F0F0F] shadow-xs'
+                    : 'bg-[#1F1F1F] text-[#B3B3B3] border border-[#333333] hover:bg-[#242424]'
                 }`}
               >
                 {f.label}
@@ -293,17 +293,17 @@ export const LoansView: React.FC<LoansViewProps> = ({
       {viewTab === 'loans' && (
         <div className="space-y-3">
           {filteredLoans.length === 0 ? (
-            <div className="py-16 text-center bg-white rounded-3xl border border-[#E5E5E5] p-8">
-              <HandCoins className="w-12 h-12 mx-auto text-slate-300 mb-3" />
-              <h3 className="text-base font-bold text-[#1F1F1F]">No loan records found</h3>
-              <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+            <div className="py-16 text-center bg-[#1F1F1F] rounded-3xl border border-[#333333] p-8">
+              <HandCoins className="w-12 h-12 mx-auto text-[#8A8A8A] mb-3" />
+              <h3 className="text-base font-bold text-white">No loan records found</h3>
+              <p className="text-xs text-[#B3B3B3] mt-1 max-w-sm mx-auto">
                 {searchQuery || statusFilter !== 'all'
                   ? 'No loans match your search filter.'
                   : 'Start by clicking "Lend Money / Add Loan" to record money you lent to a friend.'}
               </p>
               <button
                 onClick={() => setIsAddModalOpen(true)}
-                className="mt-4 px-5 py-2.5 bg-[#FF9248] hover:bg-[#F07F30] text-white text-xs font-bold rounded-2xl shadow-md shadow-[#FF9248]/25 transition inline-flex items-center gap-2 cursor-pointer"
+                className="mt-4 px-5 py-2.5 bg-[#FF9248] hover:bg-[#F07F30] text-[#0F0F0F] text-xs font-bold rounded-2xl shadow-md shadow-[#FF9248]/25 transition inline-flex items-center gap-2 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add First Loan</span>
@@ -318,7 +318,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
                 return (
                   <div
                     key={loan.id}
-                    className="bg-white rounded-3xl border border-[#E5E5E5] p-5 shadow-xs hover:border-[#FFE3D0] hover:shadow-md transition-all flex flex-col justify-between gap-4 group"
+                    className="bg-[#1F1F1F] rounded-3xl border border-[#333333] p-5 shadow-xs hover:border-[#493426] hover:shadow-md transition-all flex flex-col justify-between gap-4 group"
                   >
                     {/* Top Row: Person & Status */}
                     <div className="flex items-start justify-between gap-3">
@@ -330,12 +330,12 @@ export const LoansView: React.FC<LoansViewProps> = ({
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => setActivePersonHistory(loan.personName)}
-                              className="text-base font-black text-[#1F1F1F] hover:text-[#FF9248] hover:underline text-left cursor-pointer"
+                              className="text-base font-black text-white hover:text-[#FF9248] hover:underline text-left cursor-pointer"
                             >
                               {loan.personName}
                             </button>
                           </div>
-                          <span className="text-[11px] text-slate-400 block mt-0.5">
+                          <span className="text-[11px] text-[#8A8A8A] block mt-0.5">
                             Lent on {formatDate(loan.date)}
                           </span>
                         </div>
@@ -343,19 +343,19 @@ export const LoansView: React.FC<LoansViewProps> = ({
 
                       {/* Status Badge */}
                       {loan.status === 'returned' && (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#FFF3EA] text-[#FF9248] border border-[#FFE3D0]">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#2D211A] text-[#FF9248] border border-[#493426]">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           Returned
                         </span>
                       )}
                       {loan.status === 'partially_returned' && (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#2B2415] text-amber-300 border border-[#5A451B]">
                           <RefreshCw className="w-3.5 h-3.5" />
                           Partial ({percent}%)
                         </span>
                       )}
                       {loan.status === 'pending' && (
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-[#332A17] text-amber-300">
                           <Clock className="w-3.5 h-3.5" />
                           Pending
                         </span>
@@ -364,14 +364,14 @@ export const LoansView: React.FC<LoansViewProps> = ({
 
                     {/* Loan Note */}
                     {loan.description && (
-                      <p className="text-xs text-slate-600 bg-[#FFF9F5] p-2.5 rounded-xl border border-[#FFE3D0]">
+                      <p className="text-xs text-[#B3B3B3] bg-[#242424] p-2.5 rounded-xl border border-[#493426]">
                         {loan.description}
                       </p>
                     )}
 
                     {/* Progress Bar & Amount Breakdown */}
                     <div className="space-y-2">
-                      <div className="w-full h-2 rounded-full bg-[#F5F5F5] overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-[#242424] overflow-hidden">
                         <div
                           className="h-full transition-all duration-300 rounded-full bg-[#FF9248]"
                           style={{ width: `${percent}%` }}
@@ -379,21 +379,21 @@ export const LoansView: React.FC<LoansViewProps> = ({
                       </div>
 
                       <div className="grid grid-cols-3 gap-2 text-center pt-1">
-                        <div className="p-2 rounded-xl bg-[#F5F5F5]">
-                          <span className="text-[10px] text-slate-400 font-semibold block uppercase">Lent</span>
-                          <span className="text-xs font-black text-[#1F1F1F] mt-0.5 block">
+                        <div className="p-2 rounded-xl bg-[#242424]">
+                          <span className="text-[10px] text-[#8A8A8A] font-semibold block uppercase">Lent</span>
+                          <span className="text-xs font-black text-white mt-0.5 block">
                             {formatCurrency(loan.amount)}
                           </span>
                         </div>
-                        <div className="p-2 rounded-xl bg-[#FFF3EA]">
+                        <div className="p-2 rounded-xl bg-[#2D211A]">
                           <span className="text-[10px] text-[#FF9248] font-bold block uppercase">Returned</span>
                           <span className="text-xs font-black text-[#FF9248] mt-0.5 block">
                             {formatCurrency(loan.totalReturned)}
                           </span>
                         </div>
-                        <div className="p-2 rounded-xl bg-amber-50">
-                          <span className="text-[10px] text-amber-700 font-semibold block uppercase">Remaining</span>
-                          <span className="text-xs font-black text-amber-700 mt-0.5 block">
+                        <div className="p-2 rounded-xl bg-[#2B2415]">
+                          <span className="text-[10px] text-amber-300 font-semibold block uppercase">Remaining</span>
+                          <span className="text-xs font-black text-amber-300 mt-0.5 block">
                             {formatCurrency(loan.remainingAmount)}
                           </span>
                         </div>
@@ -401,18 +401,18 @@ export const LoansView: React.FC<LoansViewProps> = ({
                     </div>
 
                     {/* Bottom Action Buttons */}
-                    <div className="pt-2 border-t border-[#E5E5E5] flex items-center justify-between gap-2">
+                    <div className="pt-2 border-t border-[#333333] flex items-center justify-between gap-2">
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={() => setActiveDetailLoan(loan)}
-                          className="px-3 py-1.5 rounded-xl border border-[#E5E5E5] text-xs font-bold text-slate-600 hover:bg-[#FFF9F5] hover:text-[#FF9248] transition flex items-center gap-1 cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl border border-[#333333] text-xs font-bold text-[#B3B3B3] hover:bg-[#242424] hover:text-[#FF9248] transition flex items-center gap-1 cursor-pointer"
                         >
                           <History className="w-3.5 h-3.5" />
                           <span>History ({loan.returns?.length || 0})</span>
                         </button>
                         <button
                           onClick={() => setActivePersonHistory(loan.personName)}
-                          className="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-[#FF9248] hover:bg-[#FFF9F5] transition cursor-pointer"
+                          className="px-2.5 py-1.5 rounded-xl text-xs font-semibold text-[#B3B3B3] hover:text-[#FF9248] hover:bg-[#242424] transition cursor-pointer"
                           title="View all transactions for this person"
                         >
                           <User className="w-3.5 h-3.5" />
@@ -422,7 +422,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
                       {loan.remainingAmount > 0 ? (
                         <button
                           onClick={() => setActiveReturnLoan(loan)}
-                          className="px-4 py-2 rounded-xl bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-white text-xs font-bold shadow-xs shadow-[#FF9248]/30 transition flex items-center gap-1.5 cursor-pointer"
+                          className="px-4 py-2 rounded-xl bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-[#0F0F0F] text-xs font-bold shadow-xs shadow-[#FF9248]/30 transition flex items-center gap-1.5 cursor-pointer"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>Mark as Returned</span>
@@ -445,15 +445,15 @@ export const LoansView: React.FC<LoansViewProps> = ({
       {/* TAB 2: BY PERSON SUMMARY */}
       {viewTab === 'people' && (
         <div className="space-y-4">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#B3B3B3]">
             Click on any person to view their complete transaction history and running repayment balance.
           </p>
 
           {peopleSummary.length === 0 ? (
-            <div className="py-16 text-center bg-white rounded-3xl border border-[#E5E5E5] p-8">
-              <Users className="w-12 h-12 mx-auto text-slate-300 mb-3" />
-              <h3 className="text-base font-bold text-[#1F1F1F]">No borrowers found</h3>
-              <p className="text-xs text-slate-500 mt-1">
+            <div className="py-16 text-center bg-[#1F1F1F] rounded-3xl border border-[#333333] p-8">
+              <Users className="w-12 h-12 mx-auto text-[#8A8A8A] mb-3" />
+              <h3 className="text-base font-bold text-white">No borrowers found</h3>
+              <p className="text-xs text-[#B3B3B3] mt-1">
                 Record loans to see per-person aggregated balances here.
               </p>
             </div>
@@ -466,7 +466,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
                   <div
                     key={p.personName}
                     onClick={() => setActivePersonHistory(p.personName)}
-                    className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-xs hover:border-[#FFE3D0] hover:shadow-md transition-all cursor-pointer space-y-4 group"
+                    className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-xs hover:border-[#493426] hover:shadow-md transition-all cursor-pointer space-y-4 group"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -474,30 +474,30 @@ export const LoansView: React.FC<LoansViewProps> = ({
                           {p.personName.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <h4 className="text-base font-black text-[#1F1F1F] group-hover:text-[#FF9248] transition-colors">
+                          <h4 className="text-base font-black text-white group-hover:text-[#FF9248] transition-colors">
                             {p.personName}
                           </h4>
-                          <span className="text-[11px] text-slate-400">
+                          <span className="text-[11px] text-[#8A8A8A]">
                             {p.loansCount} {p.loansCount === 1 ? 'loan' : 'loans'}
                           </span>
                         </div>
                       </div>
 
                       {isSettled ? (
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FFF3EA] text-[#FF9248] border border-[#FFE3D0]">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#2D211A] text-[#FF9248] border border-[#493426]">
                           All Settled
                         </span>
                       ) : (
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#332A17] text-amber-300">
                           Owes {formatCurrency(p.totalOwed)}
                         </span>
                       )}
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 text-center pt-1 border-t border-[#E5E5E5]">
+                    <div className="grid grid-cols-3 gap-2 text-center pt-1 border-t border-[#333333]">
                       <div>
-                        <span className="text-[10px] text-slate-400 font-semibold block">Total Lent</span>
-                        <span className="text-xs font-bold text-[#1F1F1F] mt-0.5 block">
+                        <span className="text-[10px] text-[#8A8A8A] font-semibold block">Total Lent</span>
+                        <span className="text-xs font-bold text-white mt-0.5 block">
                           {formatCurrency(p.totalLent)}
                         </span>
                       </div>
@@ -508,8 +508,8 @@ export const LoansView: React.FC<LoansViewProps> = ({
                         </span>
                       </div>
                       <div>
-                        <span className="text-[10px] text-amber-700 font-semibold block">Balance</span>
-                        <span className="text-xs font-black text-amber-700 mt-0.5 block">
+                        <span className="text-[10px] text-amber-300 font-semibold block">Balance</span>
+                        <span className="text-xs font-black text-amber-300 mt-0.5 block">
                           {formatCurrency(p.totalOwed)}
                         </span>
                       </div>

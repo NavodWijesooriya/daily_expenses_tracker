@@ -34,29 +34,29 @@ export const DeleteExpenseDialog: React.FC<DeleteExpenseDialogProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in">
-      <div className="w-full max-w-sm bg-white rounded-3xl shadow-2xl border border-[#E5E5E5] p-6 text-center">
-        <div className="w-12 h-12 mx-auto rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4 border border-rose-100">
+      <div className="w-full max-w-sm bg-[#1F1F1F] rounded-3xl shadow-2xl border border-[#333333] p-6 text-center">
+        <div className="w-12 h-12 mx-auto rounded-2xl bg-[#2A171A] text-rose-300 flex items-center justify-center mb-4 border border-[#54252D]">
           <AlertTriangle className="w-6 h-6" />
         </div>
 
-        <h3 className="text-base font-bold text-[#1F1F1F]">
+        <h3 className="text-base font-bold text-white">
           Are you sure you want to delete this expense?
         </h3>
 
-        <div className="mt-3 p-3.5 rounded-2xl bg-[#FFF9F5] border border-[#FFE3D0] text-left text-xs">
-          <div className="font-semibold text-[#1F1F1F] truncate">
+        <div className="mt-3 p-3.5 rounded-2xl bg-[#242424] border border-[#493426] text-left text-xs">
+          <div className="font-semibold text-white truncate">
             {expense.expenseName}
           </div>
           <div className="text-[#FF9248] font-bold mt-0.5">
             {formatCurrency(expense.amount)}
           </div>
-          <div className="text-slate-500 mt-1 flex items-center justify-between">
+          <div className="text-[#B3B3B3] mt-1 flex items-center justify-between">
             <span>{expense.category}</span>
             <span>{formatDate(expense.date)}</span>
           </div>
         </div>
 
-        <p className="text-xs text-slate-500 mt-3">
+        <p className="text-xs text-[#B3B3B3] mt-3">
           This action will immediately update your dashboard, monthly summary, and category totals.
         </p>
 
@@ -65,7 +65,7 @@ export const DeleteExpenseDialog: React.FC<DeleteExpenseDialogProps> = ({
             type="button"
             onClick={onClose}
             disabled={deleting}
-            className="flex-1 py-2.5 px-4 rounded-xl border border-[#E5E5E5] text-xs font-semibold text-slate-700 hover:bg-[#F5F5F5] transition cursor-pointer"
+            className="flex-1 py-2.5 px-4 rounded-xl border border-[#333333] text-xs font-semibold text-[#B3B3B3] hover:bg-[#242424] transition cursor-pointer"
           >
             Cancel
           </button>

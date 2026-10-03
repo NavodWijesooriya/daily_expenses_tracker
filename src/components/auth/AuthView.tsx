@@ -25,25 +25,36 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
       onSuccess();
     } catch (err: unknown) {
       console.error('Sign in error:', err);
-      setError(err instanceof Error ? err.message : 'Invalid email or password.');
+      const errorCode =
+        typeof err === 'object' && err !== null && 'code' in err && typeof err.code === 'string'
+          ? err.code
+          : undefined;
+
+      setError(
+        errorCode === 'auth/operation-not-allowed'
+          ? 'Email/password sign-in is disabled for this Firebase project. Enable it in Firebase Console under Authentication → Sign-in method → Email/Password, then try again.'
+          : err instanceof Error
+            ? err.message
+            : 'Invalid email or password.',
+      );
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-[#FFF9F5]">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-[#E5E5E5] p-8 sm:p-10 space-y-7">
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-[#0F0F0F]">
+      <div className="w-full max-w-md bg-[#1F1F1F] rounded-3xl shadow-xl border border-[#333333] p-8 sm:p-10 space-y-7">
         {/* Brand header */}
         <div className="text-center space-y-3">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-[#FF9248] to-[#E26E1D] text-white flex items-center justify-center shadow-lg shadow-[#FF9248]/30">
             <Wallet className="w-8 h-8" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-[#1F1F1F] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Sign In
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            <p className="text-xs sm:text-sm text-[#B3B3B3] mt-1">
               Enter your email and password to access your daily expenses
             </p>
           </div>
@@ -51,8 +62,8 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
 
         {/* Error notification banner */}
         {error && (
-          <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2.5 animate-in fade-in">
-            <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+          <div className="p-3.5 rounded-2xl bg-[#2A171A] border border-[#54252D] text-rose-300 text-xs flex items-center gap-2.5 animate-in fade-in">
+            <AlertCircle className="w-4 h-4 shrink-0 text-rose-300" />
             <span>{error}</span>
           </div>
         )}
@@ -63,12 +74,12 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
           <div className="space-y-1.5">
             <label
               htmlFor="email"
-              className="block text-xs font-bold text-[#1F1F1F]"
+              className="block text-xs font-bold text-white"
             >
               Email Address
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A] pointer-events-none">
                 <Mail className="w-4 h-4" />
               </div>
               <input
@@ -79,7 +90,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
                 placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white border border-[#E5E5E5] rounded-2xl text-xs sm:text-sm text-[#1F1F1F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-[#1F1F1F] border border-[#333333] rounded-2xl text-xs sm:text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-transparent transition-all"
               />
             </div>
           </div>
@@ -88,12 +99,12 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
           <div className="space-y-1.5">
             <label
               htmlFor="password"
-              className="block text-xs font-bold text-[#1F1F1F]"
+              className="block text-xs font-bold text-white"
             >
               Password
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A] pointer-events-none">
                 <Lock className="w-4 h-4" />
               </div>
               <input
@@ -105,12 +116,12 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-11 py-3 bg-white border border-[#E5E5E5] rounded-2xl text-xs sm:text-sm text-[#1F1F1F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-transparent transition-all"
+                className="w-full pl-10 pr-11 py-3 bg-[#1F1F1F] border border-[#333333] rounded-2xl text-xs sm:text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-transparent transition-all"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#FF9248] transition-colors p-1"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A] hover:text-[#FF9248] transition-colors p-1"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? (
@@ -126,7 +137,7 @@ export const AuthView: React.FC<AuthViewProps> = ({ onSuccess }) => {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3.5 px-4 bg-[#FF9248] hover:bg-[#F07F30] active:scale-[0.99] disabled:opacity-50 text-white text-xs sm:text-sm font-bold rounded-2xl shadow-lg shadow-[#FF9248]/25 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+            className="w-full py-3.5 px-4 bg-[#FF9248] hover:bg-[#F07F30] active:scale-[0.99] disabled:opacity-50 text-[#0F0F0F] text-xs sm:text-sm font-bold rounded-2xl shadow-lg shadow-[#FF9248]/25 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
           >
             {submitting ? (
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

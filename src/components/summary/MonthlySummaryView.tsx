@@ -180,10 +180,10 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
       {/* Header and Month/Year Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-[#1F1F1F] tracking-tight">
+          <h1 className="text-2xl font-black text-white tracking-tight">
             Monthly Summary
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-[#B3B3B3] mt-0.5">
             Spending performance, category breakdown, and historical comparison
           </p>
         </div>
@@ -193,7 +193,7 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(Number(e.target.value))}
-            className="px-3.5 py-2 bg-white border border-[#E5E5E5] rounded-xl text-xs font-bold text-[#1F1F1F] focus:outline-none focus:ring-2 focus:ring-[#FF9248] shadow-xs cursor-pointer"
+            className="px-3.5 py-2 bg-[#1F1F1F] border border-[#333333] rounded-xl text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-[#FF9248] shadow-xs cursor-pointer"
           >
             {monthNames.map((name, idx) => (
               <option key={name} value={idx + 1}>
@@ -205,7 +205,7 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="px-3.5 py-2 bg-white border border-[#E5E5E5] rounded-xl text-xs font-bold text-[#1F1F1F] focus:outline-none focus:ring-2 focus:ring-[#FF9248] shadow-xs cursor-pointer"
+            className="px-3.5 py-2 bg-[#1F1F1F] border border-[#333333] rounded-xl text-xs font-bold text-white focus:outline-none focus:ring-2 focus:ring-[#FF9248] shadow-xs cursor-pointer"
           >
             {availableYears.map((yr) => (
               <option key={yr} value={yr}>
@@ -236,54 +236,54 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
         </div>
 
         {/* Highest Expense */}
-        <div className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
+          <div className="flex items-center justify-between text-[#B3B3B3] text-xs font-semibold">
             <span>Highest Expense</span>
-            <div className="p-1.5 rounded-lg bg-[#FFF3EA] text-[#FF9248]">
+            <div className="p-1.5 rounded-lg bg-[#2D211A] text-[#FF9248]">
               <ArrowUp className="w-3.5 h-3.5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-xl sm:text-2xl font-bold text-[#1F1F1F] tracking-tight">
+            <div className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {formatCurrency(monthlyStats.highest)}
             </div>
-            <p className="text-[11px] text-slate-400 truncate mt-1">
+            <p className="text-[11px] text-[#8A8A8A] truncate mt-1">
               {monthlyStats.highestExp ? monthlyStats.highestExp.expenseName : 'No expenses recorded'}
             </p>
           </div>
         </div>
 
         {/* Average Expense */}
-        <div className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
+          <div className="flex items-center justify-between text-[#B3B3B3] text-xs font-semibold">
             <span>Average Expense</span>
-            <div className="p-1.5 rounded-lg bg-[#FFF3EA] text-[#FF9248]">
+            <div className="p-1.5 rounded-lg bg-[#2D211A] text-[#FF9248]">
               <Percent className="w-3.5 h-3.5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-xl sm:text-2xl font-bold text-[#1F1F1F] tracking-tight">
+            <div className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {formatCurrency(monthlyStats.average)}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-[11px] text-[#8A8A8A] mt-1">
               Per recorded transaction
             </p>
           </div>
         </div>
 
         {/* Money with People */}
-        <div className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-sm">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
+          <div className="flex items-center justify-between text-[#B3B3B3] text-xs font-semibold">
             <span>Money Given to People</span>
-            <div className="p-1.5 rounded-lg bg-[#FFF3EA] text-[#FF9248]">
+            <div className="p-1.5 rounded-lg bg-[#2D211A] text-[#FF9248]">
               <Users className="w-3.5 h-3.5" />
             </div>
           </div>
           <div className="mt-3">
-            <div className="text-xl sm:text-2xl font-bold text-[#1F1F1F] tracking-tight">
+            <div className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {formatCurrency(monthlyStats.personTotal)}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-[11px] text-[#8A8A8A] mt-1">
               Associated with named contacts
             </p>
           </div>
@@ -293,13 +293,13 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
       {/* Category Breakdown Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Home Needs */}
-        <div className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-sm">
+        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-[#FFF3EA] text-[#FF9248] rounded-xl">
+              <div className="p-2 bg-[#2D211A] text-[#FF9248] rounded-xl">
                 <Home className="w-4 h-4" />
               </div>
-              <span className="text-xs font-bold text-[#1F1F1F]">Home Needs</span>
+              <span className="text-xs font-bold text-white">Home Needs</span>
             </div>
             <span className="text-xs font-bold text-[#FF9248]">
               {monthlyStats.total > 0
@@ -307,19 +307,19 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
                 : '0%'}
             </span>
           </div>
-          <div className="mt-3 text-lg font-black text-[#1F1F1F]">
+          <div className="mt-3 text-lg font-black text-white">
             {formatCurrency(monthlyStats.homeNeeds)}
           </div>
         </div>
 
         {/* Wife */}
-        <div className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-sm">
+        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-[#FFF3EA] text-[#FF9248] rounded-xl">
+              <div className="p-2 bg-[#2D211A] text-[#FF9248] rounded-xl">
                 <Heart className="w-4 h-4" />
               </div>
-              <span className="text-xs font-bold text-[#1F1F1F]">Wife</span>
+              <span className="text-xs font-bold text-white">Wife</span>
             </div>
             <span className="text-xs font-bold text-[#FF9248]">
               {monthlyStats.total > 0
@@ -327,19 +327,19 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
                 : '0%'}
             </span>
           </div>
-          <div className="mt-3 text-lg font-black text-[#1F1F1F]">
+          <div className="mt-3 text-lg font-black text-white">
             {formatCurrency(monthlyStats.wife)}
           </div>
         </div>
 
         {/* Personal */}
-        <div className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-sm">
+        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-[#FFF3EA] text-[#FF9248] rounded-xl">
+              <div className="p-2 bg-[#2D211A] text-[#FF9248] rounded-xl">
                 <UserIcon className="w-4 h-4" />
               </div>
-              <span className="text-xs font-bold text-[#1F1F1F]">Personal</span>
+              <span className="text-xs font-bold text-white">Personal</span>
             </div>
             <span className="text-xs font-bold text-[#FF9248]">
               {monthlyStats.total > 0
@@ -347,19 +347,19 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
                 : '0%'}
             </span>
           </div>
-          <div className="mt-3 text-lg font-black text-[#1F1F1F]">
+          <div className="mt-3 text-lg font-black text-white">
             {formatCurrency(monthlyStats.personal)}
           </div>
         </div>
 
         {/* Other */}
-        <div className="p-5 rounded-3xl bg-white border border-[#E5E5E5] shadow-sm">
+        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-[#FFF3EA] text-[#FF9248] rounded-xl">
+              <div className="p-2 bg-[#2D211A] text-[#FF9248] rounded-xl">
                 <Layers className="w-4 h-4" />
               </div>
-              <span className="text-xs font-bold text-[#1F1F1F]">Other</span>
+              <span className="text-xs font-bold text-white">Other</span>
             </div>
             <span className="text-xs font-bold text-[#FF9248]">
               {monthlyStats.total > 0
@@ -367,7 +367,7 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
                 : '0%'}
             </span>
           </div>
-          <div className="mt-3 text-lg font-black text-[#1F1F1F]">
+          <div className="mt-3 text-lg font-black text-white">
             {formatCurrency(monthlyStats.other)}
           </div>
         </div>
@@ -376,17 +376,17 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
       {/* Visual Analytics Grid: Historical Bar Chart + Category Visual */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Historical Monthly Comparison (Bar Chart) */}
-        <div className="bg-white rounded-3xl p-6 border border-[#E5E5E5] shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E5]">
+        <div className="bg-[#1F1F1F] rounded-3xl p-6 border border-[#333333] shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#333333]">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-[#FFF3EA] text-[#FF9248] rounded-xl">
+              <div className="p-2 bg-[#2D211A] text-[#FF9248] rounded-xl">
                 <BarChart2 className="w-4 h-4" />
               </div>
-              <h3 className="text-sm font-bold text-[#1F1F1F]">
+              <h3 className="text-sm font-bold text-white">
                 Monthly Spending Comparison
               </h3>
             </div>
-            <span className="text-xs text-slate-400">Last 6 Months</span>
+            <span className="text-xs text-[#8A8A8A]">Last 6 Months</span>
           </div>
 
           <div className="h-56 flex items-end justify-between gap-2 pt-6 pb-2 px-2">
@@ -396,15 +396,15 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
 
               return (
                 <div key={m.key} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
-                  <div className="text-[10px] font-bold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="text-[10px] font-bold text-[#B3B3B3] opacity-0 group-hover:opacity-100 transition-opacity">
                     {formatCompactCurrency(m.total)}
                   </div>
-                  <div className="w-full max-w-[42px] bg-[#F5F5F5] rounded-2xl p-1 flex items-end h-full">
+                  <div className="w-full max-w-[42px] bg-[#242424] rounded-2xl p-1 flex items-end h-full">
                     <div
                       className={`w-full rounded-xl transition-all duration-500 ${
                         isSelected
                           ? 'bg-gradient-to-t from-[#FF9248] to-[#E26E1D] shadow-md shadow-[#FF9248]/25'
-                          : 'bg-[#E5E5E5] hover:bg-[#FFAE77]'
+                          : 'bg-[#333333] hover:bg-[#FFAE77]'
                       }`}
                       style={{ height: `${heightPct}%` }}
                     />
@@ -413,7 +413,7 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
                     className={`text-[11px] font-bold ${
                       isSelected
                         ? 'text-[#FF9248]'
-                        : 'text-slate-500'
+                        : 'text-[#B3B3B3]'
                     }`}
                   >
                     {m.label}
@@ -425,9 +425,9 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-center text-xs">
             {historicalMonths.slice(-4).map((m) => (
-              <div key={m.key} className="p-2 rounded-xl bg-[#F5F5F5]">
-                <div className="text-[11px] text-slate-400">{m.label}</div>
-                <div className="font-bold text-[#1F1F1F] mt-0.5">
+              <div key={m.key} className="p-2 rounded-xl bg-[#242424]">
+                <div className="text-[11px] text-[#8A8A8A]">{m.label}</div>
+                <div className="font-bold text-white mt-0.5">
                   {formatCompactCurrency(m.total)}
                 </div>
               </div>
@@ -436,22 +436,22 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
         </div>
 
         {/* Category Share & Proportions (Doughnut / Pie Breakdown) */}
-        <div className="bg-white rounded-3xl p-6 border border-[#E5E5E5] shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E5]">
+        <div className="bg-[#1F1F1F] rounded-3xl p-6 border border-[#333333] shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#333333]">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-[#FFF3EA] text-[#FF9248] rounded-xl">
+              <div className="p-2 bg-[#2D211A] text-[#FF9248] rounded-xl">
                 <PieIcon className="w-4 h-4" />
               </div>
-              <h3 className="text-sm font-bold text-[#1F1F1F]">
+              <h3 className="text-sm font-bold text-white">
                 Category Spending Distribution
               </h3>
             </div>
-            <span className="text-xs text-slate-400">Active Month</span>
+            <span className="text-xs text-[#8A8A8A]">Active Month</span>
           </div>
 
           {monthlyStats.total === 0 ? (
-            <div className="h-56 flex flex-col items-center justify-center text-center text-slate-400 text-xs">
-              <PieIcon className="w-8 h-8 mb-2 stroke-[1.5] text-slate-300" />
+            <div className="h-56 flex flex-col items-center justify-center text-center text-[#8A8A8A] text-xs">
+              <PieIcon className="w-8 h-8 mb-2 stroke-[1.5] text-[#8A8A8A]" />
               <span>No transactions recorded for this month</span>
             </div>
           ) : (
@@ -482,8 +482,8 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
                   })}
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Total</span>
-                  <span className="text-xs font-black text-[#1F1F1F]">
+                  <span className="text-[10px] font-bold text-[#8A8A8A] uppercase">Total</span>
+                  <span className="text-xs font-black text-white">
                     {formatCompactCurrency(monthlyStats.total)}
                   </span>
                 </div>
@@ -496,13 +496,13 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: seg.color }} />
-                        <span className="font-semibold text-slate-800">{seg.name}</span>
+                        <span className="font-semibold text-[#B3B3B3]">{seg.name}</span>
                       </div>
-                      <span className="font-bold text-[#1F1F1F]">
+                      <span className="font-bold text-white">
                         {formatCurrency(seg.value)} ({seg.percentage.toFixed(1)}%)
                       </span>
                     </div>
-                    <div className="w-full bg-[#F5F5F5] h-1.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-[#242424] h-1.5 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${seg.percentage}%`, backgroundColor: seg.color }}

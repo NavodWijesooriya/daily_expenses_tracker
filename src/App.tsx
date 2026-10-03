@@ -192,12 +192,12 @@ export default function App() {
   // Authentication Loading State
   if (authLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white text-[#1F1F1F]">
-        <div className="w-16 h-16 rounded-3xl bg-[#FF9248] flex items-center justify-center text-white shadow-xl shadow-[#FF9248]/30 animate-pulse mb-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#0F0F0F] text-white">
+        <div className="w-16 h-16 rounded-3xl bg-[#FF9248] flex items-center justify-center text-[#0F0F0F] shadow-xl shadow-[#FF9248]/30 animate-pulse mb-4">
           <Loader2 className="w-8 h-8 animate-spin" />
         </div>
         <p className="text-sm font-bold tracking-tight">Daily Expense Tracker</p>
-        <span className="text-xs text-slate-400 mt-1">Initializing secure PWA session...</span>
+        <span className="text-xs text-[#8A8A8A] mt-1">Initializing secure PWA session...</span>
       </div>
     );
   }
@@ -217,10 +217,10 @@ export default function App() {
       return (
         <div className="py-24 flex flex-col items-center justify-center text-center">
           <Loader2 className="w-8 h-8 text-[#FF9248] animate-spin mb-3" />
-          <p className="text-sm font-semibold text-slate-700">
+          <p className="text-sm font-semibold text-[#B3B3B3]">
             Loading your expense records...
           </p>
-          <span className="text-xs text-slate-400 mt-0.5">Ready for custom Firestore functions</span>
+          <span className="text-xs text-[#8A8A8A] mt-0.5">Ready for custom Firestore functions</span>
         </div>
       );
     }
@@ -280,7 +280,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#1F1F1F] flex flex-col selection:bg-[#FF9248] selection:text-white">
+    <div className="min-h-screen bg-[#0F0F0F] text-white flex flex-col selection:bg-[#FF9248] selection:text-[#0F0F0F]">
       {/* Offline and Sync notification banners */}
       <OfflineBanner hasPendingWrites={hasPendingWrites} />
 
@@ -297,7 +297,7 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         {expensesError && (
-          <div className="mb-6 p-4 rounded-2xl bg-[#FFF9F5] border border-[#FFE3D0] text-[#E26E1D] text-xs flex items-center justify-between">
+          <div className="mb-6 p-4 rounded-2xl bg-[#242424] border border-[#493426] text-[#FF9248] text-xs flex items-center justify-between">
             <span>{expensesError}</span>
             <button
               onClick={() => setExpensesError(null)}

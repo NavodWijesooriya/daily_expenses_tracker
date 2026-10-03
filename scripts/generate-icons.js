@@ -55,10 +55,10 @@ function generatePNG(width, height, isMaskable = false) {
       const dy = y - cy;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Default dark theme background with hint of brand: #180415
-      let r = 24;
-      let g = 4;
-      let b = 21;
+      // Dark background: #0F0F0F
+      let r = 15;
+      let g = 15;
+      let b = 15;
       let a = 255;
 
       // Inside wallet area
@@ -68,22 +68,22 @@ function generatePNG(width, height, isMaskable = false) {
       const inClasp = Math.abs(dx - width * 0.18) < width * 0.08 && Math.abs(dy - height * 0.1) < height * 0.05;
 
       if (inCoin) {
-        // Bright #ff70df / #ff38ce
+        // Brand orange: #FF9248
         r = 255;
-        g = 112;
-        b = 223;
+        g = 146;
+        b = 72;
       } else if (inClasp) {
-        r = 255;
-        g = 56;
-        b = 206;
+        r = 15;
+        g = 15;
+        b = 15;
       } else if (inWalletFlap) {
-        r = 255;
-        g = 56;
-        b = 206;
+        r = 36;
+        g = 36;
+        b = 36;
       } else if (inWalletBody) {
-        r = 50;
-        g = 12;
-        b = 42;
+        r = 255;
+        g = 146;
+        b = 72;
       } else {
         // Corner squircle rounding for non-maskable icons
         if (!isMaskable) {

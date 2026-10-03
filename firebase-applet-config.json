@@ -1,11 +1,11 @@
 {
-  "projectId": "primeval-reach-f07pf",
-  "appId": "1:398975383774:web:2e2ba16e003bc8063d2a4f",
-  "apiKey": "AIzaSyCORP5EzZddRJcj7E6Op7k6jE7s721QRNY",
-  "authDomain": "primeval-reach-f07pf.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-dailyexpensetrac-55a41113-8023-4379-8bea-1d364eb0b816",
-  "storageBucket": "primeval-reach-f07pf.firebasestorage.app",
-  "messagingSenderId": "398975383774",
+  "projectId": "dailyexpensestrack",
+  "appId": "1:840364158741:web:3849d7da107604158ac31c",
+  "apiKey": "AIzaSyC93h4jv0QuGhNU21w0Ti3Cckz8dfwtvzU",
+  "authDomain": "dailyexpensestrack.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "dailyexpensestrack.firebasestorage.app",
+  "messagingSenderId": "840364158741",
   "measurementId": "",
   "oAuthClientId": "398975383774-irnm8kjjui713h7uho0ka7d8pdrh77cv.apps.googleusercontent.com",
   "recaptchaSiteKey": ""

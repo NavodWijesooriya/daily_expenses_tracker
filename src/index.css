@@ -4,9 +4,9 @@
   --color-primary: #FF9248;
   --color-primary-hover: #F07F30;
   --color-primary-dark: #E26E1D;
-  --color-primary-50: #FFF9F5;
-  --color-primary-100: #FFF1E6;
-  --color-primary-200: #FFE3D0;
+  --color-primary-50: #242424;
+  --color-primary-100: #2D211A;
+  --color-primary-200: #493426;
   --color-primary-300: #FFC8A3;
   --color-primary-400: #FFAE77;
   --color-primary-500: #FF9248;
@@ -14,22 +14,32 @@
   --color-primary-700: #D86314;
 
   --color-brand: #FF9248;
-  --color-brand-light: #FFF4ED;
+  --color-brand-light: #2D211A;
   --color-brand-dark: #E26E1D;
+
+  --color-background: #0F0F0F;
+  --color-surface: #181818;
+  --color-card: #1F1F1F;
+  --color-surface-raised: #242424;
+  --color-border: #333333;
+  --color-foreground: #FFFFFF;
+  --color-muted-foreground: #B3B3B3;
+  --color-primary-foreground: #0F0F0F;
 }
 
 @layer base {
   :root {
     --primary: #FF9248;
     --primary-rgb: 255, 146, 72;
+    color-scheme: dark;
   }
 
   html, body {
     overflow-x: hidden;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-    background-color: #FFFFFF;
-    color: #1F1F1F;
+    background-color: #0F0F0F;
+    color: #FFFFFF;
   }
 
   body {

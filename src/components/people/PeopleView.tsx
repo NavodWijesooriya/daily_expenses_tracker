@@ -59,47 +59,47 @@ export const PeopleView: React.FC<PeopleViewProps> = ({ expenses, onOpenAddExpen
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-[#1F1F1F] tracking-tight">
+          <h1 className="text-2xl font-black text-white tracking-tight">
             People Tracking
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-[#B3B3B3] mt-0.5">
             Keep track of money given, shared expenses, and individual balances
           </p>
         </div>
 
         <button
           onClick={onOpenAddExpense}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-white text-xs font-bold rounded-xl shadow-sm shadow-[#FF9248]/25 transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-[#0F0F0F] text-xs font-bold rounded-xl shadow-sm shadow-[#FF9248]/25 transition cursor-pointer"
         >
           <span>+ Add Person Expense</span>
         </button>
       </div>
 
       {/* Search Input */}
-      <div className="bg-white rounded-2xl p-3 border border-[#E5E5E5] shadow-sm">
+      <div className="bg-[#1F1F1F] rounded-2xl p-3 border border-[#333333] shadow-sm">
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A8A8A]" />
           <input
             type="text"
             placeholder="Search by person name (e.g. Kasun, Nimal, Amal)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-white border border-[#E5E5E5] rounded-xl text-xs text-[#1F1F1F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
+            className="w-full pl-9 pr-4 py-2 bg-[#1F1F1F] border border-[#333333] rounded-xl text-xs text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
           />
         </div>
       </div>
 
       {/* People Grid */}
       {filteredPeople.length === 0 ? (
-        <div className="bg-white rounded-3xl p-12 text-center border border-[#E5E5E5]">
-          <Users className="w-10 h-10 mx-auto text-slate-400 mb-3" />
-          <h3 className="text-base font-bold text-[#1F1F1F]">No people tracked yet</h3>
-          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+        <div className="bg-[#1F1F1F] rounded-3xl p-12 text-center border border-[#333333]">
+          <Users className="w-10 h-10 mx-auto text-[#8A8A8A] mb-3" />
+          <h3 className="text-base font-bold text-white">No people tracked yet</h3>
+          <p className="text-xs text-[#B3B3B3] mt-1 max-w-sm mx-auto">
             When you add an expense and include a person's name in the "Person Associated" field, they will automatically appear here.
           </p>
           <button
             onClick={onOpenAddExpense}
-            className="mt-4 px-4 py-2 bg-[#FF9248] hover:bg-[#F07F30] text-white text-xs font-bold rounded-xl shadow-sm shadow-[#FF9248]/25 transition cursor-pointer"
+            className="mt-4 px-4 py-2 bg-[#FF9248] hover:bg-[#F07F30] text-[#0F0F0F] text-xs font-bold rounded-xl shadow-sm shadow-[#FF9248]/25 transition cursor-pointer"
           >
             + Add Expense with Person
           </button>
@@ -110,29 +110,29 @@ export const PeopleView: React.FC<PeopleViewProps> = ({ expenses, onOpenAddExpen
             <div
               key={person.name}
               onClick={() => setSelectedPerson(person.name)}
-              className="bg-white rounded-3xl p-5 border border-[#E5E5E5] shadow-sm hover:border-[#FFE3D0] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+              className="bg-[#1F1F1F] rounded-3xl p-5 border border-[#333333] shadow-sm hover:border-[#493426] hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-[#FFF3EA] text-[#FF9248] border border-[#FFE3D0] flex items-center justify-center font-bold text-base shadow-xs">
+                    <div className="w-12 h-12 rounded-2xl bg-[#2D211A] text-[#FF9248] border border-[#493426] flex items-center justify-center font-bold text-base shadow-xs">
                       {person.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <h3 className="font-bold text-[#1F1F1F] group-hover:text-[#FF9248] transition-colors">
+                      <h3 className="font-bold text-white group-hover:text-[#FF9248] transition-colors">
                         {person.name}
                       </h3>
-                      <span className="text-[11px] text-slate-400">
+                      <span className="text-[11px] text-[#8A8A8A]">
                         {person.count} {person.count === 1 ? 'transaction' : 'transactions'}
                       </span>
                     </div>
                   </div>
 
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 group-hover:text-[#FF9248] transition" />
+                  <ChevronRight className="w-4 h-4 text-[#8A8A8A] group-hover:translate-x-1 group-hover:text-[#FF9248] transition" />
                 </div>
 
-                <div className="mt-4 p-3 rounded-2xl bg-[#FFF9F5] border border-[#FFE3D0]">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                <div className="mt-4 p-3 rounded-2xl bg-[#242424] border border-[#493426]">
+                  <span className="text-[10px] font-bold text-[#8A8A8A] uppercase tracking-wider block">
                     Total Associated
                   </span>
                   <span className="text-lg font-black text-[#FF9248]">
@@ -141,7 +141,7 @@ export const PeopleView: React.FC<PeopleViewProps> = ({ expenses, onOpenAddExpen
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-[#E5E5E5] flex items-center justify-between text-xs text-slate-500">
+              <div className="mt-4 pt-3 border-t border-[#333333] flex items-center justify-between text-xs text-[#B3B3B3]">
                 <span>Latest: {formatDate(person.expenses[0]?.date)}</span>
                 <span className="font-semibold text-[#FF9248] group-hover:underline">
                   View History →
@@ -155,17 +155,17 @@ export const PeopleView: React.FC<PeopleViewProps> = ({ expenses, onOpenAddExpen
       {/* Person Transaction History Drawer / Modal */}
       {activePersonData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto animate-in fade-in">
-          <div className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-[#E5E5E5] p-6 md:p-8 max-h-[85vh] overflow-y-auto">
-            <div className="flex items-start justify-between pb-4 border-b border-[#E5E5E5]">
+          <div className="relative w-full max-w-xl bg-[#1F1F1F] rounded-3xl shadow-2xl border border-[#333333] p-6 md:p-8 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-start justify-between pb-4 border-b border-[#333333]">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#FF9248] to-[#E26E1D] text-white font-black text-lg flex items-center justify-center shadow-md shadow-[#FF9248]/25">
                   {activePersonData.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-[#1F1F1F]">
+                  <h3 className="text-xl font-bold text-white">
                     {activePersonData.name}
                   </h3>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-[#B3B3B3]">
                     {activePersonData.count} transactions recorded
                   </p>
                 </div>
@@ -173,15 +173,15 @@ export const PeopleView: React.FC<PeopleViewProps> = ({ expenses, onOpenAddExpen
 
               <button
                 onClick={() => setSelectedPerson(null)}
-                className="p-2 text-slate-400 hover:text-[#1F1F1F] rounded-xl hover:bg-[#F5F5F5] transition cursor-pointer"
+                className="p-2 text-[#8A8A8A] hover:text-white rounded-xl hover:bg-[#242424] transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="mt-4 p-4 rounded-2xl bg-[#FFF9F5] border border-[#FFE3D0] flex items-center justify-between">
+            <div className="mt-4 p-4 rounded-2xl bg-[#242424] border border-[#493426] flex items-center justify-between">
               <div>
-                <span className="text-xs text-slate-500 font-medium">Cumulative Total</span>
+                <span className="text-xs text-[#B3B3B3] font-medium">Cumulative Total</span>
                 <div className="text-xl font-black text-[#FF9248]">
                   {formatCurrency(activePersonData.total)}
                 </div>
@@ -191,7 +191,7 @@ export const PeopleView: React.FC<PeopleViewProps> = ({ expenses, onOpenAddExpen
                   setSelectedPerson(null);
                   onOpenAddExpense();
                 }}
-                className="px-3.5 py-1.5 bg-[#FF9248] hover:bg-[#F07F30] text-white text-xs font-bold rounded-xl transition cursor-pointer"
+                className="px-3.5 py-1.5 bg-[#FF9248] hover:bg-[#F07F30] text-[#0F0F0F] text-xs font-bold rounded-xl transition cursor-pointer"
               >
                 + Add Transaction
               </button>
@@ -199,30 +199,30 @@ export const PeopleView: React.FC<PeopleViewProps> = ({ expenses, onOpenAddExpen
 
             {/* List of expenses for this person */}
             <div className="mt-5 space-y-3">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <h4 className="text-xs font-bold text-[#8A8A8A] uppercase tracking-wider">
                 Transaction History
               </h4>
-              <div className="divide-y divide-[#E5E5E5]">
+              <div className="divide-y divide-[#333333]">
                 {activePersonData.expenses.map((exp) => (
                   <div key={exp.id} className="py-3 flex items-center justify-between gap-3">
                     <div>
-                      <div className="font-bold text-sm text-[#1F1F1F]">
+                      <div className="font-bold text-sm text-white">
                         {exp.expenseName}
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
-                        <span className="font-semibold text-slate-700">
+                      <div className="flex items-center gap-2 text-xs text-[#B3B3B3] mt-0.5">
+                        <span className="font-semibold text-[#B3B3B3]">
                           {exp.category}
                         </span>
                         <span>•</span>
                         <span>{formatDate(exp.date)}</span>
                       </div>
                       {exp.description && (
-                        <p className="text-xs text-slate-400 italic mt-1">"{exp.description}"</p>
+                        <p className="text-xs text-[#8A8A8A] italic mt-1">"{exp.description}"</p>
                       )}
                     </div>
 
                     <div className="text-right">
-                      <span className="text-sm font-bold text-[#1F1F1F]">
+                      <span className="text-sm font-bold text-white">
                         {formatCurrency(exp.amount)}
                       </span>
                       <div className="mt-1">

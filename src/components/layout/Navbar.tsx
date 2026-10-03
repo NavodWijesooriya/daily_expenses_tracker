@@ -9,14 +9,11 @@ import {
   Wifi,
   WifiOff,
   LogOut,
-  Sun,
-  Moon,
   Plus,
   HandCoins,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { useOnlineStatus } from '../../hooks/useOnlineStatus';
-import { useTheme } from '../../hooks/useTheme';
 import { PWAInstallButton } from '../pwa/PWAInstallButton';
 
 interface NavbarProps {
@@ -28,13 +25,6 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAddExpense }) => {
   const { user, signOutUser } = useAuth();
   const { isOnline } = useOnlineStatus();
-  const { theme, setTheme } = useTheme();
-
-  const toggleTheme = () => {
-    if (theme === 'dark') setTheme('light');
-    else setTheme('dark');
-  };
-
   const navLinks = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/dashboard/expenses', label: 'Expenses', icon: Receipt },
@@ -45,7 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[#E5E5E5] bg-white/95 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-[#333333] bg-[#181818]/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Logo and Brand */}
         <div className="flex items-center gap-6">
@@ -57,7 +47,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
               <Wallet className="w-5 h-5" />
             </div>
             <div className="text-left hidden xs:block">
-              <span className="text-base font-black tracking-tight text-[#1F1F1F] leading-none block">
+              <span className="text-base font-black tracking-tight text-white leading-none block">
                 Daily Expense
               </span>
               <span className="text-[11px] font-bold text-[#FF9248] tracking-wider uppercase">
@@ -77,8 +67,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
                   onClick={() => navigate(link.path)}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-[#FFF3EA] text-[#FF9248] font-bold'
-                      : 'text-slate-600 hover:text-[#1F1F1F] hover:bg-[#FFF9F5]'
+                      ? 'bg-[#2D211A] text-[#FF9248] font-bold'
+                      : 'text-[#B3B3B3] hover:text-white hover:bg-[#242424]'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -94,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
           {/* Quick Add Expense Button (Desktop) */}
           <button
             onClick={onOpenAddExpense}
-            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-white text-xs font-bold rounded-xl shadow-md shadow-[#FF9248]/25 transition-all cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-[#0F0F0F] text-xs font-bold rounded-xl shadow-md shadow-[#FF9248]/25 transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Add Expense</span>
@@ -107,8 +97,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
           <div
             className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-colors ${
               isOnline
-                ? 'bg-[#FFF3EA] text-[#FF9248] border border-[#FFE3D0]'
-                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                ? 'bg-[#2D211A] text-[#FF9248] border border-[#493426]'
+                : 'bg-[#2B2415] text-amber-300 border border-[#5A451B]'
             }`}
             title={isOnline ? 'Connected to internet' : 'Working offline with local cache'}
           >
@@ -129,20 +119,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
 
           {/* User profile / Logout */}
           {user && (
-            <div className="flex items-center gap-2 pl-1 border-l border-[#E5E5E5]">
+            <div className="flex items-center gap-2 pl-1 border-l border-[#333333]">
               <button
                 onClick={() => navigate('/dashboard/settings')}
                 className="flex items-center gap-2 group focus:outline-none cursor-pointer"
                 title={user.email || 'Settings'}
               >
-                <div className="w-8 h-8 rounded-full bg-[#FFF3EA] text-[#FF9248] font-bold text-xs flex items-center justify-center border border-[#FFE3D0] group-hover:ring-2 ring-[#FF9248] transition">
+                <div className="w-8 h-8 rounded-full bg-[#2D211A] text-[#FF9248] font-bold text-xs flex items-center justify-center border border-[#493426] group-hover:ring-2 ring-[#FF9248] transition">
                   {user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase() || 'U'}
                 </div>
               </button>
 
               <button
                 onClick={signOutUser}
-                className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-100 transition hidden sm:block cursor-pointer"
+                className="p-1.5 text-[#8A8A8A] hover:text-rose-300 rounded-lg hover:bg-[#242424] transition hidden sm:block cursor-pointer"
                 title="Logout"
               >
                 <LogOut className="w-4 h-4" />
