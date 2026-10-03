@@ -123,7 +123,7 @@ export const RecordReturnModal: React.FC<RecordReturnModalProps> = ({
 
             <div className="grid grid-cols-3 gap-2 pt-1 border-t border-[#493426]">
               <div className="text-center p-2 rounded-xl bg-[#1F1F1F] border border-[#333333]">
-                <span className="text-[10px] text-[#8A8A8A] font-semibold block">Original Loan</span>
+                <span className="text-[10px] text-[#8A8A8A] font-semibold block">Originally Given</span>
                 <span className="text-xs font-bold text-white mt-0.5 block">
                   {formatCurrency(loan.amount)}
                 </span>

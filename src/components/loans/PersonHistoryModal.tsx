@@ -140,11 +140,11 @@ export const PersonHistoryModal: React.FC<PersonHistoryModalProps> = ({
             </div>
           </div>
 
-          {/* Active Loans Section */}
+          {/* Money Given Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-[#8A8A8A] uppercase tracking-wider">
-                Loans Associated With {personName} ({personLoans.length})
+                Money Given to {personName} ({personLoans.length})
               </h3>
               {onOpenAddLoanForPerson && (
                 <button

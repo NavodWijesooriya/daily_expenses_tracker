@@ -25,11 +25,11 @@ export const LoanSummaryCard: React.FC<LoanSummaryCardProps> = ({
     <div className="space-y-4">
       {/* 3 Main Currency Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Total Money Lent */}
+        {/* Total Money Given */}
         <div className="relative overflow-hidden rounded-3xl bg-[#1F1F1F] p-5 border border-[#333333] shadow-xs">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-[#B3B3B3]">
-              Total Money Lent
+              Total Money Given
             </span>
             <div className="w-9 h-9 rounded-2xl bg-[#2D211A] text-[#FF9248] flex items-center justify-center">
               <HandCoins className="w-5 h-5" />
@@ -40,7 +40,7 @@ export const LoanSummaryCard: React.FC<LoanSummaryCardProps> = ({
               {formatCurrency(stats.totalLent)}
             </h3>
             <p className="text-[11px] text-[#8A8A8A] mt-0.5">
-              Across {stats.totalLoansCount} loan {stats.totalLoansCount === 1 ? 'record' : 'records'}
+              Across {stats.totalLoansCount} {stats.totalLoansCount === 1 ? 'record' : 'records'}
             </p>
           </div>
         </div>
@@ -62,7 +62,7 @@ export const LoanSummaryCard: React.FC<LoanSummaryCardProps> = ({
             <p className="text-[11px] text-[#FF9248]/80 font-medium mt-0.5">
               {stats.totalLent > 0
                 ? `${Math.round((stats.totalReturned / stats.totalLent) * 100)}% recovery rate`
-                : 'No loans recorded'}
+                : 'No money given yet'}
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export const LoanSummaryCard: React.FC<LoanSummaryCardProps> = ({
         </div>
       </div>
 
-      {/* Loan Status Count Chips (Pending, Partial, Fully Returned) */}
+      {/* Money Given Status Count Chips (Pending, Partial, Fully Returned) */}
       <div className="grid grid-cols-3 gap-2.5">
         <button
           type="button"
@@ -101,7 +101,7 @@ export const LoanSummaryCard: React.FC<LoanSummaryCardProps> = ({
         >
           <div className="flex items-center gap-1.5 text-amber-600">
             <Clock className="w-3.5 h-3.5" />
-            <span className="text-[11px] font-bold uppercase tracking-wider">Pending Loans</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider">Pending</span>
           </div>
           <div className="text-lg sm:text-xl font-black text-white mt-1">
             {stats.pendingCount}

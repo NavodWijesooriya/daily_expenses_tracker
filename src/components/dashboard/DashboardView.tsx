@@ -294,7 +294,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       </div>
 
-      {/* Loans & Money Lent Overview Card */}
+      {/* Money Given to People Overview Card */}
       <div className="bg-gradient-to-br from-[#1F1F1F] via-[#2A2A2A] to-[#1F1F1F] text-white rounded-3xl p-6 sm:p-7 border border-[#333333] shadow-xl relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
@@ -303,7 +303,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-black tracking-tight text-white">Loans & Money Returns</h3>
+                <h3 className="text-lg font-black tracking-tight text-white">Money Given to People</h3>
                 {loanStats.pendingCount > 0 && (
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FF9248]/20 text-[#FF9248] border border-[#FF9248]/30">
                     {loanStats.pendingCount} Pending
@@ -311,7 +311,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 )}
               </div>
               <p className="text-xs text-[#8A8A8A] mt-0.5">
-                Track money lent to friends, partial payments, and balances owed
+                Track money given to people, partial returns, and balances owed
               </p>
             </div>
           </div>
@@ -320,7 +320,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             onClick={() => navigate('/dashboard/loans')}
             className="self-start sm:self-auto flex items-center gap-1.5 px-5 py-2.5 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-[#0F0F0F] text-xs font-bold rounded-xl shadow-md shadow-[#FF9248]/25 transition cursor-pointer"
           >
-            <span>Open Loans Tracker</span>
+            <span>View Money Given to People</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>

@@ -182,10 +182,10 @@ export const LoansView: React.FC<LoansViewProps> = ({
             </div>
             <div>
               <h1 className="text-2xl font-black text-white tracking-tight">
-                Loans & Money Returns
+                Money Given to People
               </h1>
               <p className="text-xs text-[#B3B3B3]">
-                Track money lent to friends and record full or partial repayments
+                Track money given to people and record full or partial repayments
               </p>
             </div>
           </div>
@@ -196,7 +196,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
           className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-[#0F0F0F] text-xs font-bold rounded-2xl shadow-lg shadow-[#FF9248]/25 transition cursor-pointer"
         >
           <Plus className="w-4 h-4 stroke-[2.5]" />
-          <span>Lend Money / Add Loan</span>
+          <span>Record Money Given</span>
         </button>
       </div>
 
@@ -207,7 +207,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
         onFilterChange={(f) => setStatusFilter(f)}
       />
 
-      {/* View Mode Tabs (All Loans vs By Person) */}
+      {/* View Mode Tabs (All Money Given vs By Person) */}
       <div className="flex items-center justify-between gap-4 border-b border-[#333333] pb-2">
         <div className="flex items-center gap-2">
           <button
@@ -218,7 +218,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
                 : 'text-[#B3B3B3] hover:bg-[#242424]'
             }`}
           >
-            All Loans ({loans.length})
+            All Records ({loans.length})
           </button>
           <button
             onClick={() => setViewTab('people')}
@@ -244,7 +244,7 @@ export const LoansView: React.FC<LoansViewProps> = ({
               <option value="date_desc">Newest First</option>
               <option value="date_asc">Oldest First</option>
               <option value="remaining_desc">Highest Owed</option>
-              <option value="amount_desc">Largest Loan</option>
+              <option value="amount_desc">Largest Amount Given</option>
             </select>
           </div>
         )}
@@ -295,18 +295,18 @@ export const LoansView: React.FC<LoansViewProps> = ({
           {filteredLoans.length === 0 ? (
             <div className="py-16 text-center bg-[#1F1F1F] rounded-3xl border border-[#333333] p-8">
               <HandCoins className="w-12 h-12 mx-auto text-[#8A8A8A] mb-3" />
-              <h3 className="text-base font-bold text-white">No loan records found</h3>
+              <h3 className="text-base font-bold text-white">No records found</h3>
               <p className="text-xs text-[#B3B3B3] mt-1 max-w-sm mx-auto">
                 {searchQuery || statusFilter !== 'all'
-                  ? 'No loans match your search filter.'
-                  : 'Start by clicking "Lend Money / Add Loan" to record money you lent to a friend.'}
+                  ? 'No records match your search filter.'
+                  : 'Start by clicking "Record Money Given" to record money given to someone.'}
               </p>
               <button
                 onClick={() => setIsAddModalOpen(true)}
                 className="mt-4 px-5 py-2.5 bg-[#FF9248] hover:bg-[#F07F30] text-[#0F0F0F] text-xs font-bold rounded-2xl shadow-md shadow-[#FF9248]/25 transition inline-flex items-center gap-2 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
-                <span>Add First Loan</span>
+                <span>Record Money Given</span>
               </button>
             </div>
           ) : (
@@ -452,9 +452,9 @@ export const LoansView: React.FC<LoansViewProps> = ({
           {peopleSummary.length === 0 ? (
             <div className="py-16 text-center bg-[#1F1F1F] rounded-3xl border border-[#333333] p-8">
               <Users className="w-12 h-12 mx-auto text-[#8A8A8A] mb-3" />
-              <h3 className="text-base font-bold text-white">No borrowers found</h3>
+              <h3 className="text-base font-bold text-white">No people found</h3>
               <p className="text-xs text-[#B3B3B3] mt-1">
-                Record loans to see per-person aggregated balances here.
+                Record money given to see per-person balances here.
               </p>
             </div>
           ) : (

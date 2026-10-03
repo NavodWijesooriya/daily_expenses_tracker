@@ -104,7 +104,7 @@ export const LoanDetailModal: React.FC<LoanDetailModalProps> = ({
           {/* Note / Description */}
           {loan.description && (
             <div className="p-3.5 rounded-2xl bg-[#242424] border border-[#493426] space-y-1">
-              <span className="text-[10px] font-bold text-[#8A8A8A] uppercase tracking-wider block">Initial Loan Note</span>
+              <span className="text-[10px] font-bold text-[#8A8A8A] uppercase tracking-wider block">Note</span>
               <p className="text-xs text-white leading-relaxed">{loan.description}</p>
             </div>
           )}
@@ -179,7 +179,7 @@ export const LoanDetailModal: React.FC<LoanDetailModalProps> = ({
           {onDeleteLoan ? (
             <button
               onClick={() => {
-                if (window.confirm(`Are you sure you want to delete this loan record for ${loan.personName}?`)) {
+                if (window.confirm(`Are you sure you want to delete this money given record for ${loan.personName}?`)) {
                   onDeleteLoan(loan.id);
                   onClose();
                 }
@@ -187,7 +187,7 @@ export const LoanDetailModal: React.FC<LoanDetailModalProps> = ({
               className="text-xs font-bold text-rose-300 hover:underline flex items-center gap-1 cursor-pointer"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              Delete Loan
+              Delete Record
             </button>
           ) : <div />}
 

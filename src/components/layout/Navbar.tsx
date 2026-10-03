@@ -28,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
   const navLinks = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/dashboard/expenses', label: 'Expenses', icon: Receipt },
-    { path: '/dashboard/loans', label: 'Loans', icon: HandCoins },
+    { path: '/dashboard/loans', label: 'Money Given to People', icon: HandCoins },
     { path: '/dashboard/monthly-summary', label: 'Summary', icon: PieChart },
     { path: '/dashboard/people', label: 'People', icon: Users },
     { path: '/dashboard/settings', label: 'Settings', icon: Settings },
@@ -72,7 +72,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate, onOpenAdd
                   }`}
                 >
                   <Icon className="w-4 h-4" />
-                  <span>{link.label}</span>
+                  <span
+                    className={
+                      link.path === '/dashboard/loans'
+                        ? 'max-w-[80px] text-[10px] leading-tight'
+                        : ''
+                    }
+                  >
+                    {link.label}
+                  </span>
                 </button>
               );
             })}

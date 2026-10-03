@@ -41,7 +41,7 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
 
     const numAmount = parseFloat(amount);
     if (isNaN(numAmount) || numAmount <= 0) {
-      setError('Please enter a valid loan amount greater than zero.');
+      setError('Please enter a valid amount greater than zero.');
       return;
     }
 
@@ -65,7 +65,7 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
       setDescription('');
       onClose();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to record loan.');
+      setError(err instanceof Error ? err.message : 'Failed to record money given.');
     } finally {
       setSubmitting(false);
     }
@@ -77,9 +77,9 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#333333]">
           <div>
-            <h2 className="text-lg font-black text-white">Lend Money / Add Loan</h2>
+            <h2 className="text-lg font-black text-white">Money Given to People</h2>
             <p className="text-xs text-[#B3B3B3] mt-0.5">
-              Record money given to a friend with pending return status
+              Record money given to a person and track any returns
             </p>
           </div>
           <button
@@ -219,7 +219,7 @@ export const AddLoanModal: React.FC<AddLoanModalProps> = ({
               disabled={submitting}
               className="px-6 py-2.5 rounded-xl bg-[#FF9248] hover:bg-[#F07F30] active:scale-95 text-xs font-bold text-[#0F0F0F] shadow-md shadow-[#FF9248]/25 transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
-              {submitting ? 'Recording...' : 'Record Loan'}
+              {submitting ? 'Recording...' : 'Record Money Given'}
             </button>
           </div>
         </form>

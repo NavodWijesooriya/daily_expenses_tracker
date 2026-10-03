@@ -9,8 +9,6 @@ interface AddExpenseModalProps {
     expenseName: string;
     amount: number;
     category: string;
-    personName?: string;
-    description?: string;
     date: string;
   }) => Promise<void>;
   existingCategories: string[];
@@ -27,8 +25,6 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
   const [category, setCategory] = useState('Home Needs');
   const [customCategory, setCustomCategory] = useState('');
   const [isCustomCategory, setIsCustomCategory] = useState(false);
-  const [personName, setPersonName] = useState('');
-  const [description, setDescription] = useState('');
   const [date, setDate] = useState(getTodayDateString());
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -69,8 +65,6 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
         expenseName: trimmedName,
         amount: numAmount,
         category: chosenCategory,
-        personName: personName.trim() || undefined,
-        description: description.trim() || undefined,
         date,
       });
 
@@ -80,8 +74,6 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
       setCategory('Home Needs');
       setCustomCategory('');
       setIsCustomCategory(false);
-      setPersonName('');
-      setDescription('');
       setDate(getTodayDateString());
       onClose();
     } catch (err: unknown) {
@@ -221,41 +213,6 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
                 ))}
               </div>
             )}
-          </div>
-
-          {/* Person Name (Optional) */}
-          <div>
-            <label className="block text-xs font-semibold text-white mb-1">
-              Person Associated (Optional)
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                maxLength={100}
-                placeholder="e.g., Kasun, Nimal, Amal"
-                value={personName}
-                onChange={(e) => setPersonName(e.target.value)}
-                className="w-full px-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-xl text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
-              />
-            </div>
-            <p className="text-[11px] text-[#8A8A8A] mt-1">
-              Track money given, spent on behalf of, or associated with specific individuals.
-            </p>
-          </div>
-
-          {/* Description / Note (Optional) */}
-          <div>
-            <label className="block text-xs font-semibold text-white mb-1">
-              Description / Note (Optional)
-            </label>
-            <textarea
-              rows={2}
-              maxLength={500}
-              placeholder="e.g., Gave money to friend for repair"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-xl text-sm text-white placeholder:text-[#8A8A8A] focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248] resize-none"
-            />
           </div>
 
           {/* Action buttons */}

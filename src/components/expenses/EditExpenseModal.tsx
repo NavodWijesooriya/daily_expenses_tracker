@@ -22,8 +22,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
   const [category, setCategory] = useState('Home Needs');
   const [isCustomCategory, setIsCustomCategory] = useState(false);
   const [customCategory, setCustomCategory] = useState('');
-  const [personName, setPersonName] = useState('');
-  const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,8 +31,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
       setExpenseName(expense.expenseName);
       setAmount(expense.amount.toString());
       setDate(expense.date);
-      setPersonName(expense.personName || '');
-      setDescription(expense.description || '');
 
       const normalizedCat = expense.category === 'Wife Personal' ? 'Wife' : expense.category;
       const isKnown = ['Home Needs', 'Wife', 'Personal', 'Other'].includes(normalizedCat);
@@ -81,8 +77,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
         expenseName: trimmedName,
         amount: numAmount,
         category: chosenCategory,
-        personName: personName.trim() || undefined,
-        description: description.trim() || undefined,
         date,
       });
       onClose();
@@ -212,33 +206,6 @@ export const EditExpenseModal: React.FC<EditExpenseModalProps> = ({
                 ))}
               </div>
             )}
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-white mb-1">
-              Person Associated (Optional)
-            </label>
-            <input
-              type="text"
-              maxLength={100}
-              placeholder="e.g., Kasun"
-              value={personName}
-              onChange={(e) => setPersonName(e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-white mb-1">
-              Description / Note (Optional)
-            </label>
-            <textarea
-              rows={2}
-              maxLength={500}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#1F1F1F] border border-[#333333] rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF9248] focus:border-[#FF9248] resize-none"
-            />
           </div>
 
           <div className="pt-2 flex items-center gap-3">

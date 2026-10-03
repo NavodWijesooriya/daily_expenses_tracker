@@ -13,7 +13,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentPath, navigate }) =
       className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#181818]/95 backdrop-blur-lg border-t border-[#333333] transition-colors"
       style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 8px)' }}
     >
-      <div className="grid grid-cols-5 items-center h-14 max-w-lg mx-auto px-2">
+      <div className="grid grid-cols-5 items-center h-16 max-w-lg mx-auto px-2">
         {/* Home */}
         <button
           onClick={() => navigate('/dashboard')}
@@ -40,7 +40,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentPath, navigate }) =
           <span className="text-[10px] tracking-tight">Expenses</span>
         </button>
 
-        {/* Loans */}
+        {/* Money Given to People */}
         <button
           onClick={() => navigate('/dashboard/loans')}
           className={`flex flex-col items-center justify-center gap-1 py-1 transition-colors cursor-pointer ${
@@ -50,7 +50,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentPath, navigate }) =
           }`}
         >
           <HandCoins className="w-5 h-5" />
-          <span className="text-[10px] tracking-tight">Loans</span>
+          <span className="max-w-[65px] text-center text-[9px] leading-[10px] tracking-tight">
+            Money Given to People
+          </span>
         </button>
 
         {/* Summary */}
