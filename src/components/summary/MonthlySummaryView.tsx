@@ -4,7 +4,6 @@ import {
   Home,
   Heart,
   Layers,
-  Users,
   BarChart2,
   PieChart as PieIcon,
   ArrowUp,
@@ -32,7 +31,6 @@ interface MonthlyStats {
   lowest: number;
   lowestExp: Expense | null;
   average: number;
-  personTotal: number;
 }
 
 export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses }) => {
@@ -69,7 +67,6 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
     let personal = 0;
     let other = 0;
     const categoryBreakdown: Record<string, number> = {};
-    let personTotal = 0;
     let highest = 0;
     let lowest = Infinity;
     let highestExp: Expense | null = null;
@@ -85,11 +82,6 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
       else if (exp.category === 'Wife' || exp.category === 'Wife Personal') wife += amt;
       else if (exp.category === 'Personal') personal += amt;
       else other += amt;
-
-      // Person tracking
-      if (exp.personName && exp.personName.trim()) {
-        personTotal += amt;
-      }
 
       // Min/Max
       if (amt > highest) {
@@ -120,7 +112,6 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
       lowest,
       lowestExp,
       average,
-      personTotal,
     };
   }, [expenses, monthPrefix]);
 
@@ -271,23 +262,6 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ expenses
           </div>
         </div>
 
-        {/* Money with People */}
-        <div className="p-5 rounded-3xl bg-[#1F1F1F] border border-[#333333] shadow-sm">
-          <div className="flex items-center justify-between text-[#B3B3B3] text-xs font-semibold">
-            <span>Money Given to People</span>
-            <div className="p-1.5 rounded-lg bg-[#2D211A] text-[#FF9248]">
-              <Users className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div className="mt-3">
-            <div className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-              {formatCurrency(monthlyStats.personTotal)}
-            </div>
-            <p className="text-[11px] text-[#8A8A8A] mt-1">
-              Associated with named contacts
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Category Breakdown Cards */}
